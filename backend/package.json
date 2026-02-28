@@ -4,7 +4,7 @@
   "description": "Learn languages by reading.",
   "main": "build/server.js",
   "engines": {
-    "node": "^16.13.x"
+    "node": ">=20"
   },
   "scripts": {
     "build": "tsc",
@@ -67,7 +67,6 @@
     "cross-env": "^10.1.0",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "lint-staged": "^16.3.0",
