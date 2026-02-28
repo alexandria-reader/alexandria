@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const sgMail = require('@sendgrid/mail');
+import sgMail from '@sendgrid/mail';
 
 if (process.env.SENDGRID_API_KEY)
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);

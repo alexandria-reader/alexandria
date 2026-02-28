@@ -1,5 +1,4 @@
 const fs = require('fs');
-// import { Client } from 'pg';
 const { Client } = require('pg');
 
 const schema = fs.readFileSync('./src/model/schema.sql', 'utf-8');

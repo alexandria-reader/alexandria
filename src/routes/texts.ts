@@ -1,29 +1,31 @@
 import express from 'express';
 import texts from '../services/texts';
+import readingProgress from '../services/reading-progress';
 import users from '../services/users';
-import { Text } from '../types';
+import { TextPagination, Text } from '../types';
 
 const router: express.Router = express.Router();
 
-router.get('/language/:languageId/', async (req, res): Promise<void> => {
+router.get('/language/:languageId/:page/', async (req, res): Promise<void> => {
   const { user } = res.locals;
-  const { languageId } = req.params;
-
-  const allTexts: Array<Text> = await texts.getByUserAndLanguage(
+  const { languageId, page } = req.params;
+  const textPagination: TextPagination = await texts.getByUserAndLanguage(
     Number(user.id),
-    languageId
+    languageId,
+    page
   );
-  res.json(allTexts);
+  res.json(textPagination);
 });
 
 router.get('/:id', async (req, res): Promise<void> => {
   const { user } = res.locals;
   const { id } = req.params;
 
-  const textById: Text = await texts.getById(Number(id));
+  const textById: Text = await texts.getById(Number(id), Number(user.id));
 
   if (textById.userId === user.id) {
     res.json(textById);
+    return;
   }
 
   res.status(404).send();
@@ -55,6 +57,26 @@ router.post('/', async (req, res): Promise<void> => {
   res.status(406).send();
 });
 
+router.put('/:id/progress', async (req, res): Promise<void> => {
+  const { user } = res.locals;
+  const id: number = Number(req.params.id);
+  const { pageStartWordIndex } = req.body;
+
+  const text: Text = await texts.getById(id, Number(user.id));
+
+  if (text.userId !== user.id) {
+    res.status(404).send();
+    return;
+  }
+
+  const progress = await readingProgress.save(
+    Number(user.id),
+    id,
+    pageStartWordIndex
+  );
+  res.json(progress);
+});
+
 router.put('/:id', async (req, res): Promise<void> => {
   const { user } = res.locals;
 
@@ -73,7 +95,7 @@ router.delete('/:id', async (req, res): Promise<void> => {
   const { user } = res.locals;
   const id: number = Number(req.params.id);
 
-  const toBeDeleted: Text = await texts.getById(id);
+  const toBeDeleted: Text = await texts.getById(id, Number(user.id));
 
   if (toBeDeleted.userId === user.id) {
     await texts.remove(id);

@@ -10,7 +10,6 @@ const verifyLoginDetails = async function (
   password: string
 ): Promise<UserDB> {
   const result = await userData.getByEmail(email);
-  // console.log(result);
   const user: UserDB | null = result.rowCount > 0 ? result.rows[0] : null;
 
   const passwordsMatch: boolean = user

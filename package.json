@@ -10,6 +10,7 @@
     "build": "tsc",
     "start": "node build/server.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev src/server.ts",
+    "local-dev": "npm run start-docker-postgres && npm run dev",
     "staging": "cross-env NODE_ENV=staging ts-node-dev src/server.ts",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --collectCoverage",
     "start-docker-postgres": "docker-compose -f postgres.yaml up -d",

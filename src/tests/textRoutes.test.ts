@@ -43,7 +43,20 @@ describe('Testing adding texts', () => {
     expect(response.text).toMatch(/The Little Match Girl/);
   });
 
-  test('Texts can be found by id', async () => {
+  test('Texts can be fetched by language with pagination', async () => {
+    const response = await api
+      .get('/api/texts/language/en/1/')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.currentPage).toBe(1);
+    expect(response.body.totalTexts).toBe(2);
+    expect(response.body.totalPages).toBe(1);
+    expect(response.body.data).toHaveLength(2);
+  });
+
+  test('Texts can be found by id and include pageStartWordIndex', async () => {
     const response = await api
       .get('/api/texts/1')
       .set('Authorization', `Bearer ${token}`)
@@ -51,6 +64,27 @@ describe('Testing adding texts', () => {
       .expect('Content-Type', /application\/json/);
 
     expect(response.text).toMatch(/The Little Match Girl/);
+    expect(typeof response.body.pageStartWordIndex).toBe('number');
+  });
+
+  test('PUT /api/texts/:id/progress saves and returns progress', async () => {
+    const response = await api
+      .put('/api/texts/1/progress')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ pageStartWordIndex: 100 })
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.pageStartWordIndex).toBe(100);
+    expect(response.body.textId).toBe(1);
+  });
+
+  test('PUT /api/texts/:id/progress rejects negative index', async () => {
+    await api
+      .put('/api/texts/1/progress')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ pageStartWordIndex: -1 })
+      .expect(400);
   });
 
   test('Texts can be updated', async () => {

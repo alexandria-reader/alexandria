@@ -2,6 +2,7 @@
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
 import { Text } from '../types';
+import { DEFAULT_OFFSET } from '../constants';
 
 const getAll = async function (): Promise<QueryResult> {
   const ALL_TEXTS: string = `
@@ -12,26 +13,40 @@ const getAll = async function (): Promise<QueryResult> {
   return result;
 };
 
-const getById = async function (textId: number): Promise<QueryResult> {
+const getById = async function (
+  textId: number,
+  userId: number
+): Promise<QueryResult> {
   const TEXT_BY_ID: string = `
-    SELECT * FROM texts 
-     WHERE id = %s`;
+    SELECT t.*, rp.page_start_word_index
+      FROM texts t
+      LEFT JOIN reading_progress rp ON rp.text_id = t.id AND rp.user_id = %s
+     WHERE t.id = %s`;
 
-  const result = await dbQuery(TEXT_BY_ID, textId);
+  const result = await dbQuery(TEXT_BY_ID, userId, textId);
 
   return result;
 };
 
 const getByUserAndLanguage = async function (
   userId: number,
-  languageId: string
+  languageId: string,
+  page: number
 ): Promise<QueryResult> {
   const TEXTS_BY_USER: string = `
-      SELECT * FROM texts
-       WHERE user_id = %L AND language_id = %L
-    ORDER BY upload_time DESC NULLS LAST`;
+    SELECT *, COUNT(*) OVER () as totalTexts 
+    FROM texts
+    WHERE user_id = %L AND language_id = %L
+    ORDER BY upload_time DESC NULLS LAST
+    OFFSET %L FETCH NEXT %L ROWS ONLY`;
 
-  const result = await dbQuery(TEXTS_BY_USER, userId, languageId);
+  const result = await dbQuery(
+    TEXTS_BY_USER,
+    userId,
+    languageId,
+    DEFAULT_OFFSET * page,
+    DEFAULT_OFFSET
+  );
 
   return result;
 };
