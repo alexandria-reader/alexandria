@@ -182,7 +182,6 @@ const IndividualText = function ({
 
 const Stats = function () {
   const totalTexts = useRecoilValue(totalTextsState);
-  const textList = useRecoilValue(textlistState);
   const user = useRecoilValue(userState);
   const [learningWords, setLearningWords] = useState(0);
   const [familiarWords, setFamiliarWords] = useState(0);
@@ -208,7 +207,7 @@ const Stats = function () {
 
   useEffect(() => {
     setTextsLength(totalTexts);
-  }, [textList]);
+  }, [totalTexts]);
 
   const fetchUserwords = async function () {
     if (user) {
@@ -444,7 +443,7 @@ const UserTexts = function () {
             {
               <button
                 className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
-                data-testid="new-text"
+                data-testid="prev-page"
                 onClick={(_event) =>
                   currentPage > 1 && fetchUserTexts(currentPage - 1)
                 }
@@ -455,7 +454,7 @@ const UserTexts = function () {
             }
             <button
               className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
-              data-testid="new-text"
+              data-testid="next-page"
               onClick={(_event) =>
                 currentPage < totalPages && fetchUserTexts(currentPage + 1)
               }

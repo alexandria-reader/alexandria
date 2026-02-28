@@ -13,14 +13,23 @@ import { UserWord } from '../../types';
 
 import phraseFromSelection from '../../utils/phraseSelection';
 
+/** CSS classes shared between Word/Sentence components and measurement DOM */
+export const WORD_WRAPPER_CLASSES =
+  'inline-block text-xl md:text-lg my-2 md:my-1.5';
+export const WORD_SPAN_CLASSES =
+  'cursor-pointer border border-transparent py-2 md:py-1 p-px rounded-md';
+export const NON_WORD_CLASSES = 'inline text-xl md:text-lg my-2 md:my-1.5';
+
 const Word = function ({
   word,
   dataKey,
   context,
+  wordIndex,
 }: {
   word: string;
   dataKey: string;
   context: string;
+  wordIndex?: number;
 }) {
   const [userWords, setUserWords] = useRecoilState(userwordsState);
   const setCurrentWordContext = useSetRecoilState(currentwordContextState);
@@ -168,7 +177,7 @@ const Word = function ({
   }
 
   return (
-    <div className="inline-block text-xl md:text-lg my-2 md:my-1.5">
+    <div className={WORD_WRAPPER_CLASSES}>
       <span
         onTouchEnd={(event) => {
           setIsTouch(true);
@@ -206,9 +215,10 @@ const Word = function ({
           isWordInPhrase
             ? 'betterhover:hover:bg-violet-400 dark:betterhover:hover:bg-violet-600'
             : 'betterhover:hover:border-blue-500'
-        } cursor-pointer border border-transparent py-2 md:py-1 p-px rounded-md`}
+        } ${WORD_SPAN_CLASSES}`}
         data-key={dataKey}
         data-type={'word'}
+        data-word-index={wordIndex}
       >
         {word}
       </span>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Text, TextPagination } from '../types';
+import { Text, TextPagination, ReadingProgress } from '../types';
 import getToken from '../utils/getToken';
 import host from './host';
 
@@ -69,10 +69,28 @@ const removeTextFromServer = async function (id: number) {
   return response.data;
 };
 
+const saveReadingProgress = async function (
+  textId: number,
+  pageStartWordIndex: number
+): Promise<ReadingProgress> {
+  const token = getToken();
+
+  const response = await axios.put(
+    `${baseUrl}/${textId}/progress`,
+    { pageStartWordIndex },
+    {
+      headers: { Authorization: `bearer ${token}` },
+    }
+  );
+
+  return response.data;
+};
+
 export default {
   getAllUserTextsByLanguage,
   getTextById,
   postNewText,
   removeTextFromServer,
   updateText,
+  saveReadingProgress,
 };

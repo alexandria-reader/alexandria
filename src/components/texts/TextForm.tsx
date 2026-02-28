@@ -5,7 +5,6 @@ import textsService from '../../services/texts';
 import {
   textlistState,
   textToEditState,
-  totalTextsState,
   userState,
 } from '../../states/recoil-states';
 import { ArticleData, Text } from '../../types';
@@ -20,7 +19,6 @@ const TextForm = function () {
   const [showURLWarning, setShowURLWarning] = useState(false);
   const [newTextExtractionURL, setNewTextExtractionURL] = useState('');
   const [textToEdit, setTextToEdit] = useRecoilState(textToEditState);
-  const totalTexts = useRecoilValue(totalTextsState);
   const navigate = useNavigate();
 
   const user = useRecoilValue(userState);
@@ -29,7 +27,7 @@ const TextForm = function () {
     if (user) {
       const userTextsResponse = await textsService.getAllUserTextsByLanguage(
         user.learnLanguageId,
-        totalTexts
+        1
       );
       setTextList(userTextsResponse.data);
     }

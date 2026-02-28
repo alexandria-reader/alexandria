@@ -23,6 +23,14 @@ export type Text = {
   sourceType?: string | null;
   uploadTime?: Date;
   isPublic?: boolean;
+  pageStartWordIndex?: number;
+};
+
+export type ReadingProgress = {
+  userId: number;
+  textId: number;
+  pageStartWordIndex: number;
+  updatedAt: string;
 };
 
 export type Language = {

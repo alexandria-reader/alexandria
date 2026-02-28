@@ -1,10 +1,11 @@
 import { selector, useRecoilValue } from 'recoil';
 import { markedwordsState } from '../../states/recoil-states';
 
-import Word from './Word';
+import Word, { NON_WORD_CLASSES } from './Word';
 
 import { stripPunctuation } from '../../utils/punctuation';
 import { wordRegExp, parseText } from '../../utils/textParser';
+import { countWordsInString } from '../../utils/textTokenizer';
 
 const phrasesState = selector({
   key: 'phrasesState',
@@ -15,9 +16,11 @@ const phrasesState = selector({
 export const Phrase = function ({
   phrase,
   context,
+  startWordIndex,
 }: {
   phrase: string;
   context: string;
+  startWordIndex: number;
 }) {
   const markedWords = useRecoilValue(markedwordsState);
   const phraseStatus = markedWords[stripPunctuation(phrase.toLowerCase())];
@@ -30,6 +33,7 @@ export const Phrase = function ({
   }
 
   const tokens = parseText(phrase);
+  let wordIdx = startWordIndex;
 
   return (
     <>
@@ -40,12 +44,15 @@ export const Phrase = function ({
         >
           {tokens?.map((token, index) => {
             if (token.match(wordRegExp)) {
+              const currentIdx = wordIdx;
+              wordIdx += 1;
               return (
                 <Word
                   key={index + token}
                   dataKey={index + token}
                   word={token}
                   context={context}
+                  wordIndex={currentIdx}
                 />
               );
             }
@@ -58,55 +65,56 @@ export const Phrase = function ({
   );
 };
 
-export const Sentence = function ({ sentence }: { sentence: string }) {
+export const Sentence = function ({
+  sentence,
+  context,
+  startWordIndex,
+}: {
+  sentence: string;
+  context?: string;
+  startWordIndex: number;
+}) {
+  const effectiveContext = context ?? sentence;
   const phrases = useRecoilValue(phrasesState);
   const tokens = parseText(sentence, phrases);
+  let wordIdx = startWordIndex;
 
   return (
     <>
       {tokens?.map((token, index) => {
         if (token.match(/\S\s+\S/)) {
+          const phraseStart = wordIdx;
+          wordIdx += countWordsInString(token);
           return (
-            <Phrase key={index + token} phrase={token} context={sentence} />
+            <Phrase
+              key={index + token}
+              phrase={token}
+              context={effectiveContext}
+              startWordIndex={phraseStart}
+            />
           );
         }
 
         if (token.match(wordRegExp)) {
+          const currentIdx = wordIdx;
+          wordIdx += 1;
           return (
             <Word
               key={index + token}
               dataKey={index + token}
               word={token}
-              context={sentence}
+              context={effectiveContext}
+              wordIndex={currentIdx}
             />
           );
         }
 
         return (
-          <div
-            key={index + token}
-            className="inline text-xl md:text-lg my-2 md:my-1.5"
-          >
+          <div key={index + token} className={NON_WORD_CLASSES}>
             {token}
           </div>
         );
       })}
-    </>
-  );
-};
-
-export const Paragraph = function ({ paragraph }: { paragraph: string }) {
-  const sentences = paragraph.match(/[^\s]([^!?.]|\.{3})*["!?.:;\s]*/gmu) || [
-    '',
-  ];
-
-  return (
-    <>
-      {sentences.map((sentence, index) => (
-        <div key={index + sentence.slice(1, 9)} className="inline">
-          <Sentence sentence={sentence} />
-        </div>
-      ))}
     </>
   );
 };
