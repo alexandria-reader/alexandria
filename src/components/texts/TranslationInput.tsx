@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useEffect, useState, Suspense } from 'react';
+import { ChangeEvent, MouseEvent, useState, Suspense } from 'react';
 import parseHTML from 'html-react-parser';
 import {
   useRecoilState,
@@ -136,20 +136,6 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
   );
 
   return <div className="">{wordStatusToolbar}</div>;
-};
-
-const DictionaryIframe = function ({ url }: { url: string }) {
-  return (
-    <div className="flex justify-center">
-      <iframe
-        title="Wordreference dictionary"
-        className=""
-        width="350"
-        height="450"
-        src={url}
-      ></iframe>
-    </div>
-  );
 };
 
 const CurrentTranslationInput = function ({
@@ -379,21 +365,9 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
 
   // if a translation is not set, the state should be restored to 'undefined'
   const [translation, setTranslation] = useState('');
-  const [showDictionary, setShowDictionary] = useState(false);
   const handleInput = function (event: ChangeEvent<HTMLInputElement>) {
     setTranslation(event.target.value);
   };
-
-  useEffect(() => {
-    if (
-      currentWord?.translations.length === 0 &&
-      currentWord.word.split(' ').length < 2
-    ) {
-      setShowDictionary(true);
-    } else if (showDictionary) {
-      setShowDictionary(false);
-    }
-  }, [currentWord?.word]);
 
   const regex = new RegExp(`\\b${currentWord?.word}\\b`, 'gui');
 
@@ -446,7 +420,6 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
                   <button
                     onClick={(event) => {
                       handleTranslation(event, translation, word);
-                      setShowDictionary(false);
                       setTranslation('');
                     }}
                     id="save-translation"
@@ -482,54 +455,39 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
           <div>
             {/* dictionary buttons and change status */}
             <div className="flex flex-col gap-1 text-lg sm:text-sm justify-center">
-              {showDictionary && (
-                <>
-                  <button
-                    onClick={() => setShowDictionary(false)}
-                    className="bg-fuchsia-800 hover:bg-fuchsia-700 text-white py-2 px-4 rounded my-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-600"
-                  >
-                    Close Dictionary
-                  </button>
-                  {/* <DictionaryIframe url={`${dictionary?.url}/${currentWord.word}`} /></>} */}
-                  <DictionaryIframe
-                    url={`${
-                      location.pathname === '/demo'
-                        ? 'https://www.wordreference.com/esen'
-                        : dictionary?.url
-                    }/${currentWord.word}`}
-                  />
-                </>
-              )}
-              {!showDictionary && (
-                <>
-                  <p className="">View word in dictionary:</p>
-                  <button
-                    onClick={() => setShowDictionary(true)}
-                    className="bg-sky-600 dark:bg-sky-700 hover:bg-sky-500 dark:hover:bg-sky-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-                  >
-                    WordReference
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://www.deepl.com/translator#${currentText?.languageId}/${user?.knownLanguageId}/${currentWord.word}/`,
-                        'DeepL',
-                        'left=100,top=100,width=650,height=550'
-                      )
-                    }
-                    className="bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-600 hover:bg-sky-500 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-                  >
-                    DeepL (Popup)
-                  </button>
-                  {/* <button onClick={() => window.open(`https://www.wordreference.com/${currentText?.languageId}${user?.knownLanguageId}/${currentWord.word}`, 'WordReference', 'left=100,top=100,width=350,height=550')} className='bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded my-1'>WordReference (Popup)</button>
-          <button onClick={() => window.open(`https://translate.google.com/?sl=${currentText?.languageId}&tl=${user?.knownLanguageId}&text=${currentWord.word}%0A&op=translate/`, 'Google Translate', 'left=100,top=100,width=350,height=550')} className='bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded my-1'>Google Translate (Popup)</button> */}
-                </>
-              )}
+              <p className="">View word in dictionary:</p>
+              <button
+                onClick={() => {
+                  const url =
+                    location.pathname === '/demo'
+                      ? `https://www.wordreference.com/esen/${currentWord.word}`
+                      : `${dictionary?.url}/${currentWord.word}`;
+                  window.open(
+                    url,
+                    'WordReference',
+                    'left=100,top=100,width=350,height=550'
+                  );
+                }}
+                className="bg-sky-600 dark:bg-sky-700 hover:bg-sky-500 dark:hover:bg-sky-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+              >
+                WordReference (Popup)
+              </button>
+              <button
+                onClick={() =>
+                  window.open(
+                    `https://www.deepl.com/translator#${currentText?.languageId}/${user?.knownLanguageId}/${currentWord.word}/`,
+                    'DeepL',
+                    'left=100,top=100,width=650,height=550'
+                  )
+                }
+                className="bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-600 hover:bg-sky-500 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+              >
+                DeepL (Popup)
+              </button>
             </div>
           </div>
           <div className="flex flex-row justify-center">
-            {/* {!showDictionary && <ChangeStatus word={word} />} */}
-            {<ChangeStatus word={word} />}
+            <ChangeStatus word={word} />
           </div>
         </>
       )}
