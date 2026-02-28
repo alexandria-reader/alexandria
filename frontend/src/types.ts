@@ -1,0 +1,100 @@
+export type UserWord = {
+  id?: number;
+  word: string;
+  status?: Status;
+  translations: Array<UserTranslation>;
+  languageId?: string;
+};
+
+export type StringHash = {
+  [id: string]: string;
+};
+
+export type Status = 'learning' | 'familiar' | 'learned' | undefined;
+
+export type Text = {
+  id?: number;
+  userId?: number;
+  languageId: string;
+  title: string;
+  author?: string | null;
+  body: string;
+  sourceURL?: string | null;
+  sourceType?: string | null;
+  uploadTime?: Date;
+  isPublic?: boolean;
+  pageStartWordIndex?: number;
+};
+
+export type ReadingProgress = {
+  userId: number;
+  textId: number;
+  pageStartWordIndex: number;
+  updatedAt: string;
+};
+
+export type Language = {
+  id: string;
+  name: string;
+  flag: string;
+  eachCharIsWord: boolean;
+  isRightToLeft: boolean;
+};
+
+export type User = {
+  id?: number;
+  username: string;
+  password: string;
+  email: string;
+  knownLanguageId: string;
+  learnLanguageId: string;
+  verified?: boolean;
+};
+
+export type SanitizedUser = Omit<User, 'password'>;
+
+export type LoggedInUser = SanitizedUser & { token: string };
+
+export type Translation = {
+  id?: number;
+  wordId?: number;
+  translation: string;
+  targetLanguageId: string;
+};
+
+export type UserTranslation = Translation & { context: string };
+
+export type LoginDetails = {
+  email: string;
+  password: string;
+};
+
+export type Webdictionary = {
+  id?: number;
+  sourceLanguageId: string;
+  targetLanguageId: string;
+  name: string;
+  url: string;
+};
+
+export type ArticleData = {
+  url: string;
+  title: string;
+  description: string;
+  image: string;
+  author: string;
+  content: string;
+  published: string;
+  source: string; // original publisher
+  links: string[]; // list of alternative links
+  ttr: number; // time to read in second, 0 = unknown
+};
+
+export type TextPagination = {
+  currentPage: number;
+  nextPage: number;
+  prevPage: number;
+  data: Text[];
+  totalPages: number;
+  totalTexts: number;
+};
