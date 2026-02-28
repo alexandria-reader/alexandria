@@ -66,7 +66,7 @@ export default function Languages() {
   return (
     <div>
       <form key={2} onSubmit={handleSubmit2(changePassword)}>
-        <div className="shadow sm:rounded-md sm:overflow-hidden">
+        <div className="shadow-sm sm:rounded-md sm:overflow-hidden">
           <div className="px-4 py-5 bg-tertiary sm:p-6  flex flex-col gap-4">
             <div className="">
               <h2 className="text-xl text-secondary mb-3 tracking-normal">
@@ -88,7 +88,7 @@ export default function Languages() {
               <input
                 id="username-hidden"
                 autoComplete="username"
-                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 type="text"
               />
             </div>
@@ -104,7 +104,7 @@ export default function Languages() {
                 })}
                 id="password"
                 autoComplete="current-password"
-                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 type="password"
               />
               {errors2.password1?.type === 'required' && (
@@ -132,7 +132,7 @@ export default function Languages() {
                 })}
                 id="password2"
                 autoComplete="new-password"
-                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 type="password"
               />
               {errors2.password2?.type === 'required' && (
@@ -159,7 +159,7 @@ export default function Languages() {
                 })}
                 id="password3"
                 autoComplete="new-password"
-                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 type="password"
               />
               {errors2.password3?.type === 'required' && (
@@ -189,7 +189,7 @@ export default function Languages() {
             <div className="pt-2 text-right">
               <button
                 type="submit"
-                className="button-password relative inline-flex items-center px-8 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-600"
+                className="button-password relative inline-flex items-center px-8 py-2 border border-transparent rounded-md shadow-xs text-sm font-medium text-white bg-sky-600 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-600"
               >
                 Save
               </button>

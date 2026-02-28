@@ -33,6 +33,12 @@ jobs:
           POSTGRES_PORT: 5432
           TEST_DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
 
+      - name: Lint backend
+        run: npm run lint --workspace=backend
+
+      - name: Type-check backend
+        run: npx tsc --noEmit --project backend/tsconfig.json
+
       - name: Run backend tests
         run: npm test --workspace=backend
         env:
@@ -55,6 +61,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint frontend
+        run: npm run lint --workspace=frontend
+
+      - name: Type-check frontend
+        run: npx tsc --noEmit --project frontend/tsconfig.json
 
       - name: Build frontend
         run: npm run build --workspace=frontend

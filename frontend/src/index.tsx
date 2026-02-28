@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import { Provider } from 'jotai';
 
 import App from './App';
 import Home from './components/Home';
@@ -27,7 +27,7 @@ const root = createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
+    <Provider>
       <Router>
         <Routes>
           <Route path="/" element={<App />}>
@@ -107,6 +107,6 @@ root.render(
           </Route>
         </Routes>
       </Router>
-    </RecoilRoot>
+    </Provider>
   </React.StrictMode>
 );

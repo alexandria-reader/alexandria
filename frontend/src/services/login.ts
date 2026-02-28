@@ -8,7 +8,7 @@ const loginUser = async function (credentials: LoginDetails) {
   try {
     const request = await axios.post(baseUrl, credentials);
     return request.data;
-  } catch (e) {
+  } catch (_e) {
     return 'Email and password do not match';
   }
 };

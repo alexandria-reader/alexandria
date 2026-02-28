@@ -1,6 +1,6 @@
 export type ConnectionOptions = {
   connectionString: string | undefined;
-  ssl: boolean | Object;
+  ssl: boolean | object;
 };
 
 export type Language = {
@@ -45,6 +45,8 @@ export type User = {
   learnLanguageId: string;
   verified: boolean;
   verificationCode: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type UserDB = {
@@ -56,6 +58,8 @@ export type UserDB = {
   learn_language_id: string;
   verified: boolean;
   verification_code: string;
+  created_at: string;
+  updated_at: string;
 };
 
 export type SanitizedUser = Omit<User, 'passwordHash' | 'verificationCode'>;
@@ -72,6 +76,8 @@ export const convertUserTypes = function (dbItem: UserDB): User {
     learn_language_id: learnLanguageId,
     verified,
     verification_code: verificationCode,
+    created_at: createdAt,
+    updated_at: updatedAt,
   } = dbItem;
   return {
     id,
@@ -82,6 +88,8 @@ export const convertUserTypes = function (dbItem: UserDB): User {
     learnLanguageId,
     verified,
     verificationCode,
+    createdAt: new Date(createdAt),
+    updatedAt: new Date(updatedAt),
   };
 };
 

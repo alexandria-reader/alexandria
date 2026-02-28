@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
 
-const isAdmin = async function (userId: Number) {
+const isAdmin = async function (userId: number) {
   const FIND_USER_IN_ADMINS = 'SELECT * FROM admins WHERE user_id = %s';
   const result = await dbQuery(FIND_USER_IN_ADMINS, userId);
   return result;
@@ -54,7 +53,7 @@ const updateUserInfo = async function (
   email: string
 ) {
   const UPDATE_INFO =
-    'UPDATE users SET username = %L, email = %L WHERE id = %L RETURNING *;';
+    'UPDATE users SET username = %L, email = %L, updated_at = now() WHERE id = %L RETURNING *;';
   const result = await dbQuery(UPDATE_INFO, userName, email, userId);
   return result;
 };
@@ -63,7 +62,8 @@ const updatePassword = async function (
   userId: string,
   newPasswordHash: string
 ) {
-  const UPDATE_PASSWORD = 'UPDATE users SET password_hash = %L WHERE id = %L';
+  const UPDATE_PASSWORD =
+    'UPDATE users SET password_hash = %L, updated_at = now() WHERE id = %L';
   const result = await dbQuery(UPDATE_PASSWORD, newPasswordHash, userId);
   return result;
 };
@@ -74,7 +74,7 @@ const setUserLanguages = async function (
   userId: string
 ) {
   const setKnownLanguage =
-    'UPDATE users SET known_language_id = %L, learn_language_id = %L WHERE id = %L RETURNING *';
+    'UPDATE users SET known_language_id = %L, learn_language_id = %L, updated_at = now() WHERE id = %L RETURNING *';
   const result = await dbQuery(
     setKnownLanguage,
     knownLanguageId,
@@ -91,7 +91,8 @@ const remove = async function (userId: string): Promise<QueryResult> {
 };
 
 const verify = async function (userId: number) {
-  const VERIFY = 'UPDATE users SET verified = true WHERE id = %s RETURNING *';
+  const VERIFY =
+    'UPDATE users SET verified = true, updated_at = now() WHERE id = %s RETURNING *';
   const result = await dbQuery(VERIFY, userId);
   return result;
 };

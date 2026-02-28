@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 // generic database query function, takes SQL statement and parameters
 
 import { Client } from 'pg';

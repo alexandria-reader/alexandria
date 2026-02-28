@@ -13,9 +13,8 @@ const getBySourceTarget = async function (
   );
 
   if (result.rowCount === 0) {
-    const alternativeResult: QueryResult = await webdictionaryData.getBySource(
-      sourceLanguageId
-    );
+    const alternativeResult: QueryResult =
+      await webdictionaryData.getBySource(sourceLanguageId);
 
     return alternativeResult.rows.map((dbItem: WebdictionaryDB) =>
       convertWebdictionaryTypes(dbItem)

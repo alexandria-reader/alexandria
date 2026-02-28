@@ -1,9 +1,14 @@
-/* eslint-disable max-len */
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import { Menu, Transition } from '@headlessui/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem,
+  Transition,
+} from '@headlessui/react';
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { Text, UserWord } from '@alexandria/shared';
 import {
   textlistState,
@@ -17,7 +22,6 @@ import {
 
 import Modal from './texts/DeleteTextModal';
 
-
 import textsService from '../services/texts';
 import wordsService from '../services/words';
 
@@ -27,12 +31,12 @@ const IndividualText = function ({
   setTextToDelete,
 }: {
   text: Text;
-  setOpenModal: Function;
-  setTextToDelete: Function;
+  setOpenModal: (open: boolean) => void;
+  setTextToDelete: (text: Text | null) => void;
 }) {
-  const setCurrentText = useSetRecoilState(currenttextState);
-  const setCurrentWord = useSetRecoilState(currentwordState);
-  const setTextToEdit = useSetRecoilState(textToEditState);
+  const setCurrentText = useSetAtom(currenttextState);
+  const setCurrentWord = useSetAtom(currentwordState);
+  const setTextToEdit = useSetAtom(textToEditState);
 
   const confirmDeleteText = function () {
     setTextToDelete(text);
@@ -45,7 +49,7 @@ const IndividualText = function ({
   }, []);
 
   return (
-    <li className="mb-2 col-span-2 bg-tertiary rounded-lg shadow relative group divide-y divide-gray-200">
+    <li className="mb-2 col-span-2 bg-tertiary rounded-lg shadow-sm relative group divide-y divide-gray-200">
       <div className="flex flex-row justify-between group-hover:shadow-md">
         <Link
           className="w-full overflow-hidden"
@@ -56,7 +60,7 @@ const IndividualText = function ({
             onClick={(_event) => setCurrentText(text)}
             className="flex items-center p-6 space-x-6"
           >
-            <div className="flex justify-center items-center p-4 rounded-full flex-shrink-0 bg-fuchsia-800">
+            <div className="flex justify-center items-center p-4 rounded-full shrink-0 bg-fuchsia-800">
               <svg
                 className="w-7 h-7 text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +91,7 @@ const IndividualText = function ({
         </Link>
         <Menu as="div" className="flex m-3 w-5">
           <div>
-            <Menu.Button className="flex text-sm rounded-full">
+            <MenuButton className="flex text-sm rounded-full">
               <span className="sr-only">Open user menu</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -103,10 +107,9 @@ const IndividualText = function ({
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </Menu.Button>
+            </MenuButton>
           </div>
           <Transition
-            as={Fragment}
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -114,13 +117,13 @@ const IndividualText = function ({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="origin-top-right dark:ring-white/20 z-10 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-tertiary ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <Menu.Item>
+            <MenuItems className="origin-top-right dark:ring-white/20 z-10 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-tertiary ring-1 ring-black ring-opacity-5 focus:outline-hidden">
+              <MenuItem>
                 {({ active }) => (
                   <NavLink
                     to="/texts/edit"
                     onClick={() => setTextToEdit(text)}
-                    className={`block px-4 py-2 hover:bg-gray-200 hover:dark:bg-gray-700 text-sm text-six ${
+                    className={`block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm text-six ${
                       active ? 'bg-primary' : ''
                     }`}
                   >
@@ -143,12 +146,12 @@ const IndividualText = function ({
                     </div>
                   </NavLink>
                 )}
-              </Menu.Item>
-              <Menu.Item>
+              </MenuItem>
+              <MenuItem>
                 {({ active }) => (
                   <a
                     onClick={() => confirmDeleteText()}
-                    className={`block px-4 py-2 text-sm hover:bg-gray-200 hover:dark:bg-gray-700 text-six ${
+                    className={`block px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 text-six ${
                       active ? 'bg-primary' : ''
                     }`}
                   >
@@ -171,8 +174,8 @@ const IndividualText = function ({
                     </div>
                   </a>
                 )}
-              </Menu.Item>
-            </Menu.Items>
+              </MenuItem>
+            </MenuItems>
           </Transition>
         </Menu>
       </div>
@@ -181,8 +184,8 @@ const IndividualText = function ({
 };
 
 const Stats = function () {
-  const totalTexts = useRecoilValue(totalTextsState);
-  const user = useRecoilValue(userState);
+  const totalTexts = useAtomValue(totalTextsState);
+  const user = useAtomValue(userState);
   const [learningWords, setLearningWords] = useState(0);
   const [familiarWords, setFamiliarWords] = useState(0);
   const [learnedWords, setLearnedWords] = useState(0);
@@ -224,10 +227,10 @@ const Stats = function () {
   }, [user]);
 
   return (
-    <div className="md:col-span-1 hidden md:flex flex-col gap-6 bg-tertiary rounded-lg shadow p-6">
+    <div className="md:col-span-1 hidden md:flex flex-col gap-6 bg-tertiary rounded-lg shadow-sm p-6">
       <div className="flex gap-2 items-center">
         <div className="p-3">
-          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 flex-shrink-0 ">
+          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 shrink-0 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 text-white"
@@ -256,7 +259,7 @@ const Stats = function () {
 
       <div className="flex gap-2 items-center">
         <div className="p-3">
-          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 flex-shrink-0 ">
+          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 shrink-0 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 text-white"
@@ -283,7 +286,7 @@ const Stats = function () {
 
       <div className="flex gap-2 items-center">
         <div className="p-3">
-          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 flex-shrink-0 ">
+          <div className="p-4 flex justify-center items-center rounded-xl bg-fuchsia-800 shrink-0 ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-7 w-7 text-white"
@@ -310,7 +313,7 @@ const Stats = function () {
 
       <div className="flex gap-2 items-center">
         <div className="p-3">
-          <div className="flex justify-center items-center p-4 rounded-xl bg-fuchsia-800 flex-shrink-0 ">
+          <div className="flex justify-center items-center p-4 rounded-xl bg-fuchsia-800 shrink-0 ">
             <svg
               className="w-7 h-7 text-white"
               xmlns="http://www.w3.org/2000/svg"
@@ -339,12 +342,12 @@ const Stats = function () {
 };
 
 const UserTexts = function () {
-  const [textList, setTextList] = useRecoilState(textlistState);
-  const user = useRecoilValue(userState);
-  const names = useRecoilValue(languageNamesState);
-  const setTotalTexts = useSetRecoilState(totalTextsState);
+  const [textList, setTextList] = useAtom(textlistState);
+  const user = useAtomValue(userState);
+  const names = useAtomValue(languageNamesState);
+  const setTotalTexts = useSetAtom(totalTextsState);
   const [openModal, setOpenModal] = useState(false);
-  const [textToDelete, setTextToDelete] = useState(null);
+  const [textToDelete, setTextToDelete] = useState<Text | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -399,7 +402,7 @@ const UserTexts = function () {
               {user && user.verified === true ? (
                 <NavLink to={'/texts/new'}>
                   <button
-                    className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded"
+                    className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded-sm"
                     data-testid="new-text"
                   >
                     New Text
@@ -424,7 +427,7 @@ const UserTexts = function () {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-[1fr,1fr,320px] gap-3 grid-cols-1">
+        <div className="grid md:grid-cols-[1fr_1fr_320px] gap-3 grid-cols-1">
           <ul className="md:col-start-0 md:col-span-2">
             {textList && textList.length > 0
               ? textList.map((text) => (
@@ -442,7 +445,7 @@ const UserTexts = function () {
           <div className="md:col-start-0 md:col-span-2 flex justify-between items-start">
             {
               <button
-                className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
+                className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded-sm disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
                 data-testid="prev-page"
                 onClick={(_event) =>
                   currentPage > 1 && fetchUserTexts(currentPage - 1)
@@ -453,7 +456,7 @@ const UserTexts = function () {
               </button>
             }
             <button
-              className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
+              className="bg-sky-600 w-28 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 text-white font-bold py-2 px-4 rounded-sm disabled:bg-gray-500 disabled:text-slate-50 disabled:border-slate-200 disabled:shadow-none"
               data-testid="next-page"
               onClick={(_event) =>
                 currentPage < totalPages && fetchUserTexts(currentPage + 1)

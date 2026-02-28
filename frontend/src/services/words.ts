@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import axios from 'axios';
 import { UserWord } from '@alexandria/shared';
 import getToken from '../utils/getToken';

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,12 +18,14 @@ const sanitizeUser = function (user: User): SanitizedUser {
     knownLanguageId: user.knownLanguageId,
     learnLanguageId: user.learnLanguageId,
     verified: user.verified,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 
   return sanitizedUser;
 };
 
-const isAdmin = async function (userId: Number): Promise<boolean> {
+const isAdmin = async function (userId: number): Promise<boolean> {
   const result: QueryResult = await userData.isAdmin(userId);
   if (result.rowCount === 0) return false;
   return true;
@@ -87,8 +88,18 @@ const addNew = async function (
   if (newUser.id) {
     await textData.addMatchGirlToUser(newUser.id, learnLanguageId);
   }
-  if (process.env.NODE_ENV !== 'test')
-    await sendmail.sendVerificationEmail(verificationCode, email, username);
+  if (process.env.NODE_ENV !== 'test') {
+    const emailSent = await sendmail.sendVerificationEmail(
+      verificationCode,
+      email,
+      username
+    );
+    if (!emailSent) {
+      console.error(
+        `Signup succeeded but verification email failed for user ${newUser.id} (${email})`
+      );
+    }
+  }
   return sanitizeUser(newUser);
 };
 

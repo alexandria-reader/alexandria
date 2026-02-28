@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue } from 'jotai';
 import { Text } from '@alexandria/shared';
 import textsService from '../../services/texts';
 import {
@@ -12,17 +12,17 @@ import { ArticleData } from '../../types';
 import urlService from '../../services/url';
 
 const TextForm = function () {
-  const [textList, setTextList] = useRecoilState(textlistState);
+  const [textList, setTextList] = useAtom(textlistState);
   const [newTextBody, setNewTextBody] = useState('');
   const [newTextTitle, setNewTextTitle] = useState('');
   const [newTextURL, setNewTextURL] = useState('');
   const [warningMessage, setWarningMessage] = useState('');
   const [showURLWarning, setShowURLWarning] = useState(false);
   const [newTextExtractionURL, setNewTextExtractionURL] = useState('');
-  const [textToEdit, setTextToEdit] = useRecoilState(textToEditState);
+  const [textToEdit, setTextToEdit] = useAtom(textToEditState);
   const navigate = useNavigate();
 
-  const user = useRecoilValue(userState);
+  const user = useAtomValue(userState);
 
   const fetchUserTexts = async function () {
     if (user) {
@@ -73,9 +73,8 @@ const TextForm = function () {
 
     if (newTextExtractionURL.startsWith('http')) {
       setShowURLWarning(false);
-      const textObject: ArticleData | null = await urlService.postURL(
-        newTextExtractionURL
-      );
+      const textObject: ArticleData | null =
+        await urlService.postURL(newTextExtractionURL);
 
       if (textObject?.content) {
         let body = textObject.content;
@@ -182,7 +181,7 @@ const TextForm = function () {
                     >
                       Title
                     </label>
-                    <div className="mt-1 flex rounded-md shadow-sm">
+                    <div className="mt-1 flex rounded-md shadow-xs">
                       <input
                         type="text"
                         placeholder="Title"
@@ -208,7 +207,7 @@ const TextForm = function () {
                       id="about"
                       name="about"
                       rows={10}
-                      className="shadow-sm bg-tertiary dark:border-transparent focus:ring-0 focus:border-sky-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                      className="shadow-xs bg-tertiary dark:border-transparent focus:ring-0 focus:border-sky-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                       placeholder="Paste your text here"
                       value={newTextBody}
                       onChange={(e) => setNewTextBody(e.target.value)}
@@ -224,12 +223,12 @@ const TextForm = function () {
                     newTextBody && newTextTitle
                       ? 'bg-sky-600 text-white border-0 focus:ring-sky-500 hover:bg-sky-500'
                       : 'bg-gray-300 dark:bg-gray-600 text-gray-400 pointer-events-none'
-                  } justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2`}
+                  } justify-center py-2 px-4 border border-transparent shadow-xs text-sm font-medium rounded-md text-white focus:outline-hidden focus:ring-2 focus:ring-offset-2`}
                 >
                   Save
                 </button>
                 <NavLink to={'/texts'} onClick={() => cancelButton()}>
-                  <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-fuchsia-800 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500">
+                  <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-xs text-sm font-medium rounded-md text-white bg-fuchsia-800 hover:bg-fuchsia-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500">
                     Cancel
                   </button>
                 </NavLink>
@@ -270,7 +269,7 @@ const TextForm = function () {
                         >
                           Source URL:
                         </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
+                        <div className="mt-1 flex rounded-md shadow-xs">
                           <input
                             type="text"
                             name="text-url"
@@ -284,11 +283,11 @@ const TextForm = function () {
                           />
                           <button
                             type="submit"
-                            className={`inline-flex focus:ring-0 justify-center py-2 px-4 border border-l-0 border-gray-300 dark:border-transparent shadow-sm text-sm font-medium rounded-r-md text-white ${
+                            className={`inline-flex focus:ring-0 justify-center py-2 px-4 border border-l-0 border-gray-300 dark:border-transparent shadow-xs text-sm font-medium rounded-r-md text-white ${
                               newTextExtractionURL
-                                ? 'bg-sky-600 text-white border-1 border-sky-600 focus:ring-sky-600 hover:bg-sky-600'
+                                ? 'bg-sky-600 text-white border border-sky-600 focus:ring-sky-600 hover:bg-sky-600'
                                 : 'bg-gray-300 dark:bg-gray-600 text-gray-400 pointer-events-none'
-                            } focus:outline-none focus:ring-2 focus:ring-offset-2 `}
+                            } focus:outline-hidden focus:ring-2 focus:ring-offset-2 `}
                           >
                             Extract
                           </button>

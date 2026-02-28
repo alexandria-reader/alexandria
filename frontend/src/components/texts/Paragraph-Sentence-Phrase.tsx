@@ -1,4 +1,4 @@
-import { selector, useRecoilValue } from 'recoil';
+import { atom, useAtomValue } from 'jotai';
 import { markedwordsState } from '../../states/recoil-states';
 
 import Word, { NON_WORD_CLASSES } from './Word';
@@ -7,11 +7,9 @@ import { stripPunctuation } from '../../utils/punctuation';
 import { wordRegExp, parseText } from '../../utils/textParser';
 import { countWordsInString } from '../../utils/textTokenizer';
 
-const phrasesState = selector({
-  key: 'phrasesState',
-  get: ({ get }) =>
-    Object.keys(get(markedwordsState)).filter((key) => key.match(/\S\s+\S/)),
-});
+const phrasesState = atom((get) =>
+  Object.keys(get(markedwordsState)).filter((key) => key.match(/\S\s+\S/))
+);
 
 export const Phrase = function ({
   phrase,
@@ -22,7 +20,7 @@ export const Phrase = function ({
   context: string;
   startWordIndex: number;
 }) {
-  const markedWords = useRecoilValue(markedwordsState);
+  const markedWords = useAtomValue(markedwordsState);
   const phraseStatus = markedWords[stripPunctuation(phrase.toLowerCase())];
 
   let wordClass = '';
@@ -39,7 +37,7 @@ export const Phrase = function ({
     <>
       <div className="inline text-xl md:text-lg">
         <span
-          className={`${wordClass} cursor-pointer m-[-1px] border border-transparent betterhover:hover:border-zinc-500 hover:py-2.5 md:py-1.5 py-2 rounded-md`}
+          className={`${wordClass} cursor-pointer -m-px border border-transparent betterhover:hover:border-zinc-500 hover:py-2.5 md:py-1.5 py-2 rounded-md`}
           data-type={'phrase'}
         >
           {tokens?.map((token, index) => {
@@ -75,7 +73,7 @@ export const Sentence = function ({
   startWordIndex: number;
 }) {
   const effectiveContext = context ?? sentence;
-  const phrases = useRecoilValue(phrasesState);
+  const phrases = useAtomValue(phrasesState);
   const tokens = parseText(sentence, phrases);
   let wordIdx = startWordIndex;
 

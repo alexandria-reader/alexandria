@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 export default function Privacy() {
   return (
     <main className="container mx-auto mb-auto">
-      <div className="text-md py-8 max-w-[37.5rem] mx-auto p-8 flex flex-col gap-6">
+      <div className="text-md py-8 max-w-150 mx-auto p-8 flex flex-col gap-6">
         <div className="text-3xl font-extrabold m-auto text-center pt-10 pb-10">
           Privacy Policy of Alexandria
         </div>

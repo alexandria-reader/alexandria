@@ -1,7 +1,7 @@
 import { ErrorBoundary } from 'react-error-boundary';
 import { Outlet } from 'react-router';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 // import useLocalStorage from 'use-local-storage';
 import { userState } from './states/recoil-states';
 import Fallback from './components/Fallback';
@@ -12,7 +12,7 @@ import getToken from './utils/getToken';
 import userServices from './services/users';
 
 function App() {
-  const [user, setUser] = useRecoilState(userState);
+  const [user, setUser] = useAtom(userState);
   const [errorState, setErrorState] = useState(false);
 
   // const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -41,7 +41,7 @@ function App() {
         try {
           const tokenUser = await userServices.getUserFromToken(localToken);
           setUser(tokenUser);
-        } catch (error) {
+        } catch (_error) {
           localStorage.removeItem('alexandria-user-token');
         }
       }

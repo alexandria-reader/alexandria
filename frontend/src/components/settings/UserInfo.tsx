@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import userServices from '../../services/users';
 import { userState } from '../../states/recoil-states';
 
 export default function UserInfo() {
-  const [user, setUser] = useRecoilState(userState);
+  const [user, setUser] = useAtom(userState);
   const [usermessage, setUsermessage] = useState('');
   const [showUserMessage, setShowUserMessage] = useState(true);
 
@@ -43,7 +43,7 @@ export default function UserInfo() {
   return (
     <div>
       <form key={1} onSubmit={handleSubmit(changeUserInfo)}>
-        <div className="shadow sm:rounded-md sm:overflow-hidden">
+        <div className="shadow-sm sm:rounded-md sm:overflow-hidden">
           <div className="px-4 py-5 bg-tertiary sm:p-6 flex flex-col gap-4">
             <div>
               <h2 className="text-xl text-secondary tracking-normal">
@@ -67,7 +67,7 @@ export default function UserInfo() {
                 id="username"
                 name="username"
                 defaultValue={user?.username}
-                className="input appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 bg-four dark:border-transparent placeholder-gray-500 text-tertiary focus:outline-none focus:ring-0 dark:focus:border-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 bg-four dark:border-transparent placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-0 dark:focus:border-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 type="text"
               />
               {errors.username?.type === 'required' && (
@@ -102,7 +102,7 @@ export default function UserInfo() {
                 id="email"
                 name="email"
                 autoComplete="email"
-                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm"
                 defaultValue={user?.email}
                 type="email"
               />
@@ -129,7 +129,7 @@ export default function UserInfo() {
               <button
                 type="submit"
                 name="button-name-email"
-                className="relative button-name-email inline-flex items-center px-8 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                className="relative button-name-email inline-flex items-center px-8 py-2 border border-transparent rounded-md shadow-xs text-sm font-medium text-white bg-sky-600 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
               >
                 Save
               </button>

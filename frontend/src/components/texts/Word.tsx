@@ -1,7 +1,6 @@
-/* eslint-disable max-len */
 import { TouchEvent, useState } from 'react';
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { UserWord } from '@alexandria/shared';
 import {
   markedwordsState,
@@ -9,7 +8,6 @@ import {
   currentwordState,
   currentwordContextState,
 } from '../../states/recoil-states';
-
 
 import phraseFromSelection from '../../utils/phraseSelection';
 
@@ -31,10 +29,10 @@ const Word = function ({
   context: string;
   wordIndex?: number;
 }) {
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
-  const setCurrentWordContext = useSetRecoilState(currentwordContextState);
-  const setCurrentWord = useSetRecoilState(currentwordState);
-  const markedWords = useRecoilValue(markedwordsState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
+  const setCurrentWordContext = useSetAtom(currentwordContextState);
+  const setCurrentWord = useSetAtom(currentwordState);
+  const markedWords = useAtomValue(markedwordsState);
 
   const [touchStart, setTouchStart] = useState(0);
   const [isTouch, setIsTouch] = useState(false);

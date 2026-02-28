@@ -31,7 +31,9 @@ CREATE TABLE users (
     known_language_id varchar(4) REFERENCES languages (id) NOT NULL,
     learn_language_id varchar(4) REFERENCES languages (id) NOT NULL,
     verified boolean DEFAULT false,
-    verification_code text
+    verification_code text,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now()
 );
 
 
@@ -106,6 +108,8 @@ CREATE TABLE users_words (
     user_id int NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     word_id int NOT NULL REFERENCES words (id) ON DELETE CASCADE,
     word_status wordstatus NOT NULL,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
     PRIMARY KEY (user_id, word_id)
 );
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
 import { Word } from '../types';
@@ -188,9 +187,10 @@ const updateStatus = async function (
   wordStatus: string
 ): Promise<QueryResult> {
   const UPDATE_USER_WORD_STATUS: string = `
-       UPDATE users_words 
-          SET word_status = %L 
-        WHERE user_id = %L 
+       UPDATE users_words
+          SET word_status = %L,
+              updated_at = now()
+        WHERE user_id = %L
               AND
               word_id = %L
     RETURNING *`;

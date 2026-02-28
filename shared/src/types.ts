@@ -32,7 +32,7 @@ export type UserTranslation = Translation & { context?: string };
 export type UserWord = {
   id?: number;
   word: string;
-  status?: string;
+  status?: 'learning' | 'familiar' | 'learned';
   translations: Array<UserTranslation>;
   languageId?: string;
 };
@@ -68,6 +68,8 @@ export type SanitizedUser = {
   knownLanguageId: string;
   learnLanguageId: string;
   verified?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type LoggedInUser = SanitizedUser & { token: string };

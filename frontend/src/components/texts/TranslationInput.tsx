@@ -1,11 +1,6 @@
 import { ChangeEvent, MouseEvent, useState, Suspense } from 'react';
 import parseHTML from 'html-react-parser';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useLocation } from 'react-router-dom';
 import { UserWord, Translation, UserTranslation } from '@alexandria/shared';
 import randomNumber from '../../utils/randomNumber';
@@ -25,11 +20,10 @@ import translationServices from '../../services/translations';
 import shortenContext from '../../utils/shortenContext';
 
 const ChangeStatus = function ({ word }: { word: UserWord | null }) {
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
-  const setCurrentWord = useSetRecoilState(currentwordState);
-  const resetCurrentWord = useResetRecoilState(currentwordState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
+  const setCurrentWord = useSetAtom(currentwordState);
 
-  const user = useRecoilValue(userState);
+  const user = useAtomValue(userState);
 
   const setWordStatus = function (status: Status, userWord: UserWord) {
     const newUserWord = { ...userWord };
@@ -50,7 +44,7 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
       ];
       setUserWords(updatedWords);
     } else {
-      resetCurrentWord();
+      setCurrentWord(null);
       const updatedWords = [
         ...userWords.filter(
           (wordObj: UserWord) =>
@@ -69,7 +63,7 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
       <button
         className={`hover:bg-fuchsia-500/40 dark:hover:bg-fuchsia-500/40 rounded-l-md
           has-tooltip dark:border-gray-600 border-r flex flex-col group place-content-center 
-        hover:text-white py-2 px-2  focus:outline-none focus:ring-2 focus:ring-offset-1
+        hover:text-white py-2 px-2  focus:outline-hidden focus:ring-2 focus:ring-offset-1
           ${
             word.status === 'learning'
               ? 'bg-fuchsia-500/40 dark:bg-fuchsia-500/40 text-white'
@@ -86,7 +80,7 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
       <button
         className={`hover:bg-sky-400/70 dark:hover:bg-sky-600/80 has-tooltip flex
           flex-col border-r border-gray-300 dark:border-gray-600 group place-content-center
-        hover:text-white py-2 px-2 focus:outline-none focus:ring-2 focus:ring-offset-1
+        hover:text-white py-2 px-2 focus:outline-hidden focus:ring-2 focus:ring-offset-1
           ${
             word.status === 'familiar'
               ? 'bg-sky-400/70 dark:bg-sky-600/80 text-white'
@@ -103,7 +97,7 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
       <button
         className={`hover:bg-green-600/50 dark:hover:bg-green-800 has-tooltip 
           flex flex-col group place-content-center dark:border-gray-600 hover:text-white py-2 px-2
-          focus:outline-none focus:ring-2 focus:ring-offset-1
+          focus:outline-hidden focus:ring-2 focus:ring-offset-1
           ${
             word.status === 'learned'
               ? 'bg-green-600/50 dark:bg-green-800 text-white'
@@ -120,7 +114,7 @@ const ChangeStatus = function ({ word }: { word: UserWord | null }) {
       <button
         className={`hover:bg-red-600/50 dark:hover:bg-red-700/90 has-tooltip
           rounded-r-md border-gray-300 dark:border-gray-600 border-l bord flex flex-col group
-          place-content-center align-center hover:text-white py-2 px-2  focus:outline-none focus:ring-2
+          place-content-center align-center hover:text-white py-2 px-2  focus:outline-hidden focus:ring-2
           focus:ring-offset-1 ${
             word.status === undefined ? 'bg-red-600 text-white' : ''
           }
@@ -148,8 +142,8 @@ const CurrentTranslationInput = function ({
 }) {
   const [value, setValue] = useState(translation.translation);
   const [initialValue, setInitialValue] = useState('');
-  const setCurrentWord = useSetRecoilState(currentwordState);
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
+  const setCurrentWord = useSetAtom(currentwordState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
 
   const deleteTranslation = async function () {
     const response = await translationServices.removeTranslation(translation);
@@ -177,9 +171,8 @@ const CurrentTranslationInput = function ({
     if (value !== initialValue && value) {
       const newTranslation = { ...translation };
       newTranslation.translation = value;
-      const updatedTranslation = await translationServices.updateTranslation(
-        newTranslation
-      );
+      const updatedTranslation =
+        await translationServices.updateTranslation(newTranslation);
 
       const newUserWord = { ...currentWord };
       const currentWordTranslations = [
@@ -205,7 +198,7 @@ const CurrentTranslationInput = function ({
   return (
     <div className="grid grid-cols-3 gap-6">
       <div className="col-span-3">
-        <div className="group flex rounded-md shadow-sm">
+        <div className="group flex rounded-md shadow-xs">
           <button
             onClick={() => {
               deleteTranslation();
@@ -247,12 +240,12 @@ const CurrentTranslationInput = function ({
 };
 
 const TranslationComponent = function ({ word }: { word: UserWord | null }) {
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
-  const [currentWord, setCurrentWord] = useRecoilState(currentwordState);
-  const currentText = useRecoilValue(currenttextState);
-  const currentWordContext = useRecoilValue(currentwordContextState);
-  const dictionary = useRecoilValue(currentdictionaryState);
-  const user = useRecoilValue(userState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
+  const [currentWord, setCurrentWord] = useAtom(currentwordState);
+  const currentText = useAtomValue(currenttextState);
+  const currentWordContext = useAtomValue(currentwordContextState);
+  const dictionary = useAtomValue(currentdictionaryState);
+  const user = useAtomValue(userState);
   const location = useLocation();
 
   const handleTranslation = async function (
@@ -277,9 +270,8 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
         newUserWord.translations = translations;
         setCurrentWord(newUserWord);
 
-        const userWordFromServer = await wordsService.addWordWithTranslation(
-          newUserWord
-        );
+        const userWordFromServer =
+          await wordsService.addWordWithTranslation(newUserWord);
         setCurrentWord(userWordFromServer);
 
         const updatedWords = [
@@ -303,9 +295,8 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
         let translations = [...userWord.translations, newTranslationObj];
         newUserWord.translations = translations;
         setCurrentWord(newUserWord);
-        const response = await translationServices.addTranslation(
-          newTranslationObj
-        );
+        const response =
+          await translationServices.addTranslation(newTranslationObj);
         translations = [
           ...userWord.translations.filter(
             (transObj) => transObj.translation !== newTranslationObj.translation
@@ -469,7 +460,7 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
                     'left=100,top=100,width=350,height=550'
                   );
                 }}
-                className="bg-sky-600 dark:bg-sky-700 hover:bg-sky-500 dark:hover:bg-sky-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                className="bg-sky-600 dark:bg-sky-700 hover:bg-sky-500 dark:hover:bg-sky-600 text-white py-2 px-4 rounded-sm focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
               >
                 WordReference (Popup)
               </button>
@@ -481,7 +472,7 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
                     'left=100,top=100,width=650,height=550'
                   )
                 }
-                className="bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-600 hover:bg-sky-500 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                className="bg-sky-600 dark:bg-sky-700 dark:hover:bg-sky-600 hover:bg-sky-500 text-white py-2 px-4 rounded-sm focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
               >
                 DeepL (Popup)
               </button>
@@ -497,9 +488,9 @@ const TranslationComponent = function ({ word }: { word: UserWord | null }) {
 };
 
 const TranslationInput = function () {
-  const [currentWord, setCurrentWord] = useRecoilState(currentwordState);
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
-  const user = useRecoilValue(userState);
+  const [currentWord, setCurrentWord] = useAtom(currentwordState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
+  const user = useAtomValue(userState);
   const location = useLocation();
   const voices = window.speechSynthesis.getVoices();
 
@@ -571,7 +562,7 @@ const TranslationInput = function () {
         <div className=" col-start-2 flex flex-col w-[368px] col-span-1 ">
           <div
             id="translation-component"
-            className="sticky top-10 bg-tertiary shadow sm:rounded-lg sm:px-6 py-4 "
+            className="sticky top-10 bg-tertiary shadow-sm sm:rounded-lg sm:px-6 py-4 "
           >
             {currentWord && (
               <div className="flex flex-row items-center">

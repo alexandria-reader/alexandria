@@ -1,11 +1,11 @@
-import { RecoilRoot } from 'recoil';
+import { Provider } from 'jotai';
 import App from './App';
 
 xtest('renders learn react link', () => {
-  <RecoilRoot>
+  <Provider>
     render(
     <App />
     ); const linkElement = screen.getByText(/Learn by reading/i);
     expect(linkElement).toBeInTheDocument();
-  </RecoilRoot>;
+  </Provider>;
 });

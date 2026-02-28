@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import express from 'express';
 import users from '../services/users';
 import { getUserFromToken } from '../utils/middleware';
@@ -13,7 +12,7 @@ userRouter.get('/from-token', getUserFromToken, async (_req, res) => {
 
 userRouter.get('/', getUserFromToken, async (_req, res) => {
   const { user } = res.locals;
-  const isAdmin = await users.isAdmin(Number(user.id));
+  const isAdmin = await users.isAdmin(+user.id);
   if (isAdmin) {
     const response = await users.getAll();
     res.json(response);
@@ -35,7 +34,6 @@ userRouter.post('/confirm', getUserFromToken, async (req, res) => {
 userRouter.post('/', async (req, res) => {
   const { username, password, email, knownLanguageId, learnLanguageId } =
     req.body;
-  // TODO: investigate issue with incorrect credentials for sendgrid causing a 500 error
   const newUser = await users.addNew(
     username,
     password,

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import express from 'express';
 import words from '../services/words';
 import { UserWord } from '@alexandria/shared';
