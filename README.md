@@ -21,15 +21,15 @@ Managed with [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 3. Run `npm install` from the root directory
 4. Add a `.env` file to `backend/` with the values from `backend/src/model/.env.sample`
 5. Add a `.env` file to `frontend/` (see `frontend/.env.vault` for the shape)
-6. Run `npm run start-docker-postgres --workspace=backend` to start the database
+6. Run `npm run db:start` to start the database
 7. Run `npm run dev` to start both backend and frontend
 
 The backend runs on `http://localhost:3001` and the frontend on `http://localhost:3000`.
 
 # Testing
 
-Run `npm test` from the root to run backend tests. This requires a running Postgres instance — use `npm run pgtest --workspace=backend` to spin up a Docker container, run tests, and tear it down automatically.
+Run `npm test` from the root to run backend tests. This requires a running Postgres instance — use `npm run pgtest` to spin up a Docker container, run tests, and tear it down automatically.
 
 # Troubleshooting
 
-If you get a 500 error from the languages endpoint, make sure the database is running and seeded. Start it with `npm run start-docker-postgres --workspace=backend`.
+If you get a 500 error from the languages endpoint, make sure the database is running and seeded. Start it with `npm run db:start`.

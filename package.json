@@ -7,7 +7,15 @@
     "dev:backend": "npm run dev --workspace=backend",
     "dev:frontend": "npm run dev --workspace=frontend",
     "build": "npm run build --workspace=frontend",
-    "test": "npm test --workspace=backend"
+    "test": "npm run test --workspace=backend",
+    "db:start": "docker-compose -f backend/postgres.yaml up -d",
+    "db:stop": "docker-compose -f backend/postgres.yaml down --volumes",
+    "pgtest": "npm run db:start && npm test && npm run db:stop",
+    "lint": "npm run lint --workspace=backend",
+    "lint:fix": "npm run lint:fix --workspace=backend",
+    "prettier": "npm run prettier --workspace=backend",
+    "format": "npm run format --workspace=backend",
+    "tsc": "npm run tsc --workspace=backend"
   },
   "devDependencies": {
     "concurrently": "^8.0.0"

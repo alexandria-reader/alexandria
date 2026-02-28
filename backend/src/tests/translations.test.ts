@@ -1,12 +1,19 @@
 import fs from 'fs';
+import path from 'path';
 import supertest from 'supertest';
 import app from '../app';
 import dbQuery from '../model/db-query';
 
 const api = supertest(app);
 
-const reset = fs.readFileSync('./src/model/reset.sql', 'utf-8');
-const seed = fs.readFileSync('./src/model/seed.sql', 'utf-8');
+const reset = fs.readFileSync(
+  path.join(__dirname, '../model/reset.sql'),
+  'utf-8'
+);
+const seed = fs.readFileSync(
+  path.join(__dirname, '../model/seed.sql'),
+  'utf-8'
+);
 let token = '';
 
 describe('Testing adding translations', () => {
