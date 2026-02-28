@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import axios from 'axios';
 import { SanitizedUser } from '@alexandria/shared';
 import { User } from '../types';

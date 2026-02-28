@@ -41,7 +41,7 @@ export default function LoggedOutNav() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="relative dark:border-b-gray-700 dark:border-b flex items-center justify-between h-16">
               <div className="flex-1 flex items-stretch justify-between">
-                <div className="flex-shrink-0 flex items-center">
+                <div className="shrink-0 flex items-center">
                   <NavLink to={'/'}>
                     <img
                       height={32}
@@ -62,7 +62,7 @@ export default function LoggedOutNav() {
                       aria-label="toggle-light-dark-mode"
                       type="button"
                       onClick={() => toggleDarkMode()}
-                      className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-transparent dark:focus:ring-transparent rounded-lg text-sm p-2.5"
+                      className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-hidden focus:ring-4 focus:ring-transparent dark:focus:ring-transparent rounded-lg text-sm p-2.5"
                     >
                       <svg
                         id="theme-toggle-dark-icon"

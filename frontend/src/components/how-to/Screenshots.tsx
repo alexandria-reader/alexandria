@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import lightDarkGif from '../../assets/light-dark.mp4';
 import setTranslationGif from '../../assets/set-translation.mp4';
 import phraseSelectionGif from '../../assets/phrase-selection.mp4';

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import axios from 'axios';
 import getToken from '../utils/getToken';
 import host from './host';
@@ -13,7 +12,7 @@ const resendEmail = async function (): Promise<boolean> {
     });
     if (response.status === 200) return true;
     return false;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 };
