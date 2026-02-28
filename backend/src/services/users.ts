@@ -19,6 +19,8 @@ const sanitizeUser = function (user: User): SanitizedUser {
     knownLanguageId: user.knownLanguageId,
     learnLanguageId: user.learnLanguageId,
     verified: user.verified,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 
   return sanitizedUser;
@@ -87,8 +89,18 @@ const addNew = async function (
   if (newUser.id) {
     await textData.addMatchGirlToUser(newUser.id, learnLanguageId);
   }
-  if (process.env.NODE_ENV !== 'test')
-    await sendmail.sendVerificationEmail(verificationCode, email, username);
+  if (process.env.NODE_ENV !== 'test') {
+    const emailSent = await sendmail.sendVerificationEmail(
+      verificationCode,
+      email,
+      username
+    );
+    if (!emailSent) {
+      console.error(
+        `Signup succeeded but verification email failed for user ${newUser.id} (${email})`
+      );
+    }
+  }
   return sanitizeUser(newUser);
 };
 
