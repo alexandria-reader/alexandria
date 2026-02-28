@@ -13,12 +13,17 @@ const getAll = async function (): Promise<QueryResult> {
   return result;
 };
 
-const getById = async function (textId: number): Promise<QueryResult> {
+const getById = async function (
+  textId: number,
+  userId: number
+): Promise<QueryResult> {
   const TEXT_BY_ID: string = `
-    SELECT * FROM texts 
-     WHERE id = %s`;
+    SELECT t.*, rp.page_start_word_index
+      FROM texts t
+      LEFT JOIN reading_progress rp ON rp.text_id = t.id AND rp.user_id = %s
+     WHERE t.id = %s`;
 
-  const result = await dbQuery(TEXT_BY_ID, textId);
+  const result = await dbQuery(TEXT_BY_ID, userId, textId);
 
   return result;
 };

@@ -18,10 +18,20 @@ describe('Getting texts', () => {
   });
 
   test('getById: get word with id 2', async () => {
-    const textById = await texts.getById(2);
+    const textById = await texts.getById(2, 2);
     expect(textById?.title).toBe(
-      'Dans la « bibliothèque » de l’artiste zimbabwéen Kudzanai Chiurai'
+      'Dans la « bibliothèque » de l\u2019artiste zimbabwéen Kudzanai Chiurai'
     );
+  });
+
+  test('getById: returns pageStartWordIndex from seeded reading_progress', async () => {
+    const textById = await texts.getById(1, 1);
+    expect(textById.pageStartWordIndex).toBe(42);
+  });
+
+  test('getById: returns pageStartWordIndex 0 when no progress exists', async () => {
+    const textById = await texts.getById(2, 2);
+    expect(textById.pageStartWordIndex).toBe(0);
   });
 
   // test('getById: get text with non-existent id 999 returns null', () => {
@@ -47,12 +57,38 @@ describe('Getting texts', () => {
   });
 
   test('getByUser: gets all texts for user 2', async () => {
-    const userTexts = await texts.getByUserAndLanguage(2, 'de');
-    expect(userTexts).toHaveLength(1);
+    const result = await texts.getByUserAndLanguage(2, 'de', '1');
+    expect(result.currentPage).toBe(1);
+    expect(result.totalTexts).toBe(1);
+    expect(result.totalPages).toBe(1);
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0].title).toBe('Die Kuchengabel');
+  });
+
+  test('getByUser: page 2 returns empty when all texts fit on page 1', async () => {
+    const result = await texts.getByUserAndLanguage(2, 'de', '2');
+    expect(result.currentPage).toBe(2);
+    expect(result.data).toHaveLength(0);
+  });
+
+  test('update: resets reading progress', async () => {
+    const textById = await texts.getById(1, 1);
+    expect(textById.pageStartWordIndex).toBe(42);
+
+    await texts.update({
+      id: 1,
+      userId: 1,
+      languageId: 'en',
+      title: textById.title,
+      body: textById.body,
+    });
+
+    const textAfterUpdate = await texts.getById(1, 1);
+    expect(textAfterUpdate.pageStartWordIndex).toBe(0);
   });
 
   test('remove: removing an existing text', async () => {
-    const existingText = await texts.getById(3);
+    const existingText = await texts.getById(3, 2);
 
     if (existingText?.id) {
       const removedText = await texts.remove(existingText.id);

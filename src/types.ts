@@ -96,6 +96,7 @@ export type Text = {
   sourceType?: string | null;
   uploadTime?: Date;
   isPublic?: boolean;
+  pageStartWordIndex?: number;
 };
 
 export type TextDB = {

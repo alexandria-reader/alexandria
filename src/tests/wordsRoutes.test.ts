@@ -30,7 +30,7 @@ describe('Test word routes', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
       .expect((response) => {
-        expect(response.body.length).toEqual(3);
+        expect(response.body.length).toEqual(4);
       });
   });
 

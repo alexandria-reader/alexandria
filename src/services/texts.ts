@@ -1,6 +1,7 @@
 import boom from '@hapi/boom';
 import { QueryResult } from 'pg';
 import textData from '../data-access/texts';
+import readingProgressData from '../data-access/reading-progress';
 import { convertTextTypes, TextPagination, Text, TextDB } from '../types';
 import { DEFAULT_OFFSET } from '../constants';
 
@@ -10,13 +11,15 @@ const getAll = async function (): Promise<Array<Text>> {
   return result.rows.map((dbItem: TextDB) => convertTextTypes(dbItem));
 };
 
-const getById = async function (textId: number): Promise<Text> {
-  const result: QueryResult = await textData.getById(textId);
+const getById = async function (textId: number, userId: number): Promise<Text> {
+  const result: QueryResult = await textData.getById(textId, userId);
 
   if (result.rowCount === 0)
     throw boom.notFound('Could not find text with this id.');
 
-  return convertTextTypes(result.rows[0]);
+  const text = convertTextTypes(result.rows[0]);
+  text.pageStartWordIndex = result.rows[0].page_start_word_index ?? 0;
+  return text;
 };
 
 const getByUserAndLanguage = async function (
@@ -30,7 +33,7 @@ const getByUserAndLanguage = async function (
     Number(pageNumber) - 1
   );
 
-  const totalTexts = result.rows[0]?.totaltexts || 0;
+  const totalTexts = Number(result.rows[0]?.totaltexts) || 0;
   const paginatedTexts: TextPagination = {
     currentPage: Number(pageNumber),
     totalPages: Math.ceil(totalTexts / DEFAULT_OFFSET),
@@ -51,6 +54,9 @@ const addNew = async function (textObject: Text): Promise<Text> {
 const update = async function (textObject: Text): Promise<Text> {
   const result: QueryResult = await textData.update(textObject);
   if (result.rowCount === 0) throw boom.badRequest('Could not update text.');
+  if (textObject.id) {
+    await readingProgressData.deleteByTextId(textObject.id);
+  }
   return convertTextTypes(result.rows[0]);
 };
 
