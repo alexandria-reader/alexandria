@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import boom from '@hapi/boom';
 import type { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
@@ -19,7 +18,7 @@ export const extractToken = function (
 };
 
 const isJWTPayload = function (
-  value: JwtPayload | String
+  value: JwtPayload | string
 ): value is JwtPayload {
   return (value as JwtPayload).id !== undefined;
 };

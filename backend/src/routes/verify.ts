@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import express from 'express';
 import users from '../services/users';
 import { getUserFromToken } from '../utils/middleware';

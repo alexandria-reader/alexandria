@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import 'express-async-errors';
 
 import textsRouter from './routes/texts';
 import translationsRouter from './routes/translations';

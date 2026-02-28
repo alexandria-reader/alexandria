@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
 
-const isAdmin = async function (userId: Number) {
+const isAdmin = async function (userId: number) {
   const FIND_USER_IN_ADMINS = 'SELECT * FROM admins WHERE user_id = %s';
   const result = await dbQuery(FIND_USER_IN_ADMINS, userId);
   return result;

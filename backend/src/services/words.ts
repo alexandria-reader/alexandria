@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import boom from '@hapi/boom';
 import { QueryResult } from 'pg';
 import wordData from '../data-access/words';

@@ -1,6 +1,6 @@
 export type ConnectionOptions = {
   connectionString: string | undefined;
-  ssl: boolean | Object;
+  ssl: boolean | object;
 };
 
 export type Language = {

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
 import { Word } from '../types';
