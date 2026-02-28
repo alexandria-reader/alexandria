@@ -35,7 +35,6 @@ userRouter.post('/confirm', getUserFromToken, async (req, res) => {
 userRouter.post('/', async (req, res) => {
   const { username, password, email, knownLanguageId, learnLanguageId } =
     req.body;
-  // TODO: investigate issue with incorrect credentials for sendgrid causing a 500 error
   const newUser = await users.addNew(
     username,
     password,

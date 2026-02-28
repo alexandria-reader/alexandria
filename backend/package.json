@@ -38,7 +38,6 @@
   "dependencies": {
     "@alexandria/shared": "*",
     "@hapi/boom": "^10.0.0",
-    "@sendgrid/mail": "^7.7.0",
     "article-parser": "^7.2.4",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -48,6 +47,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.8.0",
     "pg-format": "^1.0.4",
+    "resend": "^6.9.3",
     "tslib": "^2.4.0",
     "typescript": "^4.8.4",
     "uuid": "^9.0.0"

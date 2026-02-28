@@ -13,11 +13,17 @@ verifyRouter.get('/resend-email', getUserFromToken, async (_req, res) => {
   const fullUser: User = (await users.getById(user.id, false)) as User;
 
   if (!user.verified) {
-    await sendmail.sendVerificationEmail(
+    const emailSent = await sendmail.sendVerificationEmail(
       fullUser.verificationCode,
       user.email,
       user.username
     );
+    if (!emailSent) {
+      res
+        .status(502)
+        .send('Failed to send verification email. Please try again later.');
+      return;
+    }
   }
 
   res.send('Sent email again.');
