@@ -68,6 +68,8 @@ export type SanitizedUser = {
   knownLanguageId: string;
   learnLanguageId: string;
   verified?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type LoggedInUser = SanitizedUser & { token: string };
