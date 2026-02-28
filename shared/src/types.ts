@@ -67,7 +67,7 @@ export type SanitizedUser = {
   email: string;
   knownLanguageId: string;
   learnLanguageId: string;
-  verified: boolean;
+  verified?: boolean;
 };
 
 export type LoggedInUser = SanitizedUser & { token: string };
