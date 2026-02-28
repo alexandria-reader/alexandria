@@ -37,7 +37,7 @@ jobs:
         run: npm run lint --workspace=backend
 
       - name: Type-check backend
-        run: npm run build --workspace=backend
+        run: npx tsc --noEmit --project backend/tsconfig.json
 
       - name: Run backend tests
         run: npm test --workspace=backend

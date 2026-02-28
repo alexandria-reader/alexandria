@@ -32,7 +32,7 @@ export type UserTranslation = Translation & { context?: string };
 export type UserWord = {
   id?: number;
   word: string;
-  status?: string;
+  status?: 'learning' | 'familiar' | 'learned';
   translations: Array<UserTranslation>;
   languageId?: string;
 };
