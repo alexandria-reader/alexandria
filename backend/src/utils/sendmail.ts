@@ -1,18 +1,24 @@
 import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend;
+function getResendClient() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 
 const sendVerificationEmail = async function (
   code: string,
   email: string,
   name: string
 ): Promise<boolean> {
+  if (process.env.NODE_ENV === 'test') return false;
+
   const token = jwt.sign(email, String(process.env.SECRET));
   const verifyUrl = `${process.env.SERVER_URL}/verify/${code}/${token}`;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = await getResendClient().emails.send({
       from: 'Alexandria <noreply@tryalexandria.com>',
       to: email,
       subject: 'Verify your email address for Alexandria',
