@@ -8,9 +8,8 @@ import UserInfo from './settings/UserInfo';
 import Password from './settings/Password';
 import Languages from './settings/Languages';
 import DeleteAccount from './settings/DeleteAccount';
-
-const logo = require('../assets/logo/logo-light.png');
-const logoDark = require('../assets/logo/logo-dark.png');
+import logo from '../assets/logo/logo-light.png';
+import logoDark from '../assets/logo/logo-dark.png';
 
 export default function Settings() {
   const user = useRecoilValue(userState);

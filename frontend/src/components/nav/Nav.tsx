@@ -16,11 +16,9 @@ import {
 import logOut from '../../utils/logOut';
 import LoggedOutNav from './LoggedOutNav';
 
-
 import languageService from '../../services/languages';
 import userService from '../../services/users';
-
-const logo = require('../../assets/logo/logo-dark.png');
+import logo from '../../assets/logo/logo-dark.png';
 
 const navigation = [
   { name: 'Texts', href: '/texts' },

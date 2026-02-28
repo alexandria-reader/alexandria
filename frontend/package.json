@@ -18,6 +18,7 @@
     ]
   },
   "dependencies": {
+    "@alexandria/shared": "*",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",

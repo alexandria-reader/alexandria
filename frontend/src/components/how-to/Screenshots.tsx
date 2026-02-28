@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-const lightDarkGif = require('../../assets/light-dark.mp4');
-const setTranslationGif = require('../../assets/set-translation.mp4');
-const phraseSelectionGif = require('../../assets/phrase-selection.mp4');
-const settingsNameGif = require('../../assets/setting_name.mp4');
-const settingsPasswordGif = require('../../assets/setting_pw.mp4');
-const settingsLangGif = require('../../assets/setting_lang.mp4');
-const signUpGif = require('../../assets/sign-up.mp4');
+import lightDarkGif from '../../assets/light-dark.mp4';
+import setTranslationGif from '../../assets/set-translation.mp4';
+import phraseSelectionGif from '../../assets/phrase-selection.mp4';
+import settingsNameGif from '../../assets/setting_name.mp4';
+import settingsPasswordGif from '../../assets/setting_pw.mp4';
+import settingsLangGif from '../../assets/setting_lang.mp4';
+import signUpGif from '../../assets/sign-up.mp4';
 
 const screenshots = [
   {

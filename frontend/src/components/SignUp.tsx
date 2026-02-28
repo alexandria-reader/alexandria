@@ -17,9 +17,8 @@ import languageServices from '../services/languages';
 import loginService from '../services/login';
 
 import { User } from '../types';
-
-const logo = require('../assets/logo/logo-light.png');
-const logoDark = require('../assets/logo/logo-dark.png');
+import logo from '../assets/logo/logo-light.png';
+import logoDark from '../assets/logo/logo-dark.png';
 
 export default function SignUp() {
   const navigate = useNavigate();

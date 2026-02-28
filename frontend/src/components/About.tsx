@@ -1,7 +1,6 @@
 import HowItWorks from './home/HowItWorks';
 import FAQ from './home/FAQ';
-
-const logo = require('../assets/logo/logo-light.png');
+import logo from '../assets/logo/logo-light.png';
 
 export default function About() {
   return (

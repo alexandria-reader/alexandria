@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import { Link } from 'react-router-dom';
-
-const trees = require('../assets/trees.jpg');
+import trees from '../assets/trees.jpg';
 
 export default function NotFound() {
   return (

@@ -4,8 +4,7 @@ import { MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './nav/Footer';
 import Nav from './nav/Nav';
-
-const fallback = require('../assets/fallback.jpg');
+import fallback from '../assets/fallback.jpg';
 
 export default function Fallback({
   resetErrorBoundary,
