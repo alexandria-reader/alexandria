@@ -1,6 +1,6 @@
 import express from 'express';
 import languages from '../services/languages';
-import { Language } from '../types';
+import { Language } from '@alexandria/shared';
 
 const languageRouter = express.Router();
 

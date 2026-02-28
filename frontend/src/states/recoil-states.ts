@@ -1,12 +1,12 @@
 import { atom, selector } from 'recoil';
 import {
   UserWord,
-  StringHash,
   Text,
   Language,
   SanitizedUser,
   Webdictionary,
-} from '../types';
+} from '@alexandria/shared';
+import { StringHash } from '../types';
 
 import { isPunctuated, stripPunctuation } from '../utils/punctuation';
 import capitalize from '../utils/capitalize';

@@ -2,7 +2,8 @@
 import express from 'express';
 import users from '../services/users';
 import { getUserFromToken } from '../utils/middleware';
-import { SanitizedUser, User } from '../types';
+import { SanitizedUser } from '@alexandria/shared';
+import { User } from '../types';
 import sendmail from '../utils/sendmail';
 
 const verifyRouter = express.Router();

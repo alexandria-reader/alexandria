@@ -1,7 +1,7 @@
 import fs from 'fs';
 import dbQuery from '../model/db-query';
 import texts from '../services/texts';
-import { Text } from '../types';
+import { Text } from '@alexandria/shared';
 
 const reset = fs.readFileSync('./src/model/reset.sql', 'utf-8');
 const seed = fs.readFileSync('./src/model/seed.sql', 'utf-8');

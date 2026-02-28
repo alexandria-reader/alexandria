@@ -1,6 +1,6 @@
 import express from 'express';
 import login from '../services/login';
-import { LoggedInUser } from '../types';
+import { LoggedInUser } from '@alexandria/shared';
 
 const loginRouter = express.Router();
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Text, TextPagination, ReadingProgress } from '../types';
+import { Text, TextPagination, ReadingProgress } from '@alexandria/shared';
 import getToken from '../utils/getToken';
 import host from './host';
 

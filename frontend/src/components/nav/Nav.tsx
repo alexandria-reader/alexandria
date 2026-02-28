@@ -5,6 +5,7 @@ import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { SanitizedUser } from '@alexandria/shared';
 import {
   languagesState,
   userState,
@@ -15,7 +16,6 @@ import {
 import logOut from '../../utils/logOut';
 import LoggedOutNav from './LoggedOutNav';
 
-import { SanitizedUser } from '../../types';
 
 import languageService from '../../services/languages';
 import userService from '../../services/users';

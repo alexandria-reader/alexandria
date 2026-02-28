@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import axios from 'axios';
-import { SanitizedUser, User } from '../types';
+import { SanitizedUser } from '@alexandria/shared';
+import { User } from '../types';
 import getToken from '../utils/getToken';
 import host from './host';
 

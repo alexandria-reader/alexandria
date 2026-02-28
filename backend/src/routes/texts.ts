@@ -2,7 +2,7 @@ import express from 'express';
 import texts from '../services/texts';
 import readingProgress from '../services/reading-progress';
 import users from '../services/users';
-import { TextPagination, Text } from '../types';
+import { TextPagination, Text } from '@alexandria/shared';
 
 const router: express.Router = express.Router();
 

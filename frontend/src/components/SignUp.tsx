@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { LoggedInUser } from '@alexandria/shared';
 import {
   languagesState,
   userState,
@@ -15,7 +16,7 @@ import userServices from '../services/users';
 import languageServices from '../services/languages';
 import loginService from '../services/login';
 
-import { User, LoggedInUser } from '../types';
+import { User } from '../types';
 
 const logo = require('../assets/logo/logo-light.png');
 const logoDark = require('../assets/logo/logo-dark.png');

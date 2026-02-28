@@ -1,10 +1,7 @@
 import { QueryResult } from 'pg';
 import webdictionaryData from '../data-access/webdictionaries';
-import {
-  WebdictionaryDB,
-  Webdictionary,
-  convertWebdictionaryTypes,
-} from '../types';
+import { Webdictionary } from '@alexandria/shared';
+import { WebdictionaryDB, convertWebdictionaryTypes } from '../types';
 
 const getBySourceTarget = async function (
   sourceLanguageId: string,

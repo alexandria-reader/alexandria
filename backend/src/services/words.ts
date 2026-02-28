@@ -3,14 +3,8 @@ import boom from '@hapi/boom';
 import { QueryResult } from 'pg';
 import wordData from '../data-access/words';
 import translations from './translations';
-import {
-  Word,
-  WordDB,
-  convertWordTypes,
-  UserWord,
-  SanitizedUser,
-  Translation,
-} from '../types';
+import { UserWord, SanitizedUser, Translation } from '@alexandria/shared';
+import { Word, WordDB, convertWordTypes } from '../types';
 
 const getAll = async function (): Promise<Array<Word>> {
   const result: QueryResult = await wordData.getAll();

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Translation } from '../types';
+import { Translation } from '@alexandria/shared';
 import getToken from '../utils/getToken';
 import host from './host';
 

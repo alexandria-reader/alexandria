@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { QueryResult } from 'pg';
 import dbQuery from '../model/db-query';
-import { Text } from '../types';
+import { Text } from '@alexandria/shared';
 import { DEFAULT_OFFSET } from '../constants';
 
 const getAll = async function (): Promise<QueryResult> {

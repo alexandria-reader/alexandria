@@ -1,4 +1,4 @@
-import { UserWord } from '../types';
+import { UserWord } from '@alexandria/shared';
 
 const demoUserWords: UserWord[] = [
   {

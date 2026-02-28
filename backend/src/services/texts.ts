@@ -2,7 +2,8 @@ import boom from '@hapi/boom';
 import { QueryResult } from 'pg';
 import textData from '../data-access/texts';
 import readingProgressData from '../data-access/reading-progress';
-import { convertTextTypes, TextPagination, Text, TextDB } from '../types';
+import { TextPagination, Text } from '@alexandria/shared';
+import { convertTextTypes, TextDB } from '../types';
 import { DEFAULT_OFFSET } from '../constants';
 
 const getAll = async function (): Promise<Array<Text>> {

@@ -1,6 +1,6 @@
 import express from 'express';
 import webdictionaries from '../services/webdictionaries';
-import { Webdictionary } from '../types';
+import { Webdictionary } from '@alexandria/shared';
 
 const webdictionariesRouter = express.Router();
 

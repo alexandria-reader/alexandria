@@ -34,6 +34,7 @@ export type UserWord = {
   word: string;
   status?: string;
   translations: Array<UserTranslation>;
+  languageId?: string;
 };
 
 export type Webdictionary = {

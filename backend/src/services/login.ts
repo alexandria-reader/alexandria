@@ -2,7 +2,8 @@ import boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import userData from '../data-access/users';
-import { convertUserTypes, LoggedInUser, User, UserDB } from '../types';
+import { LoggedInUser } from '@alexandria/shared';
+import { convertUserTypes, User, UserDB } from '../types';
 import users from './users';
 
 const verifyLoginDetails = async function (

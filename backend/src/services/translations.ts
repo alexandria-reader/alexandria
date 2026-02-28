@@ -1,7 +1,8 @@
 import boom from '@hapi/boom';
 import { QueryResult } from 'pg';
 import translationData from '../data-access/translations';
-import { TranslationDB, Translation, convertTranslationTypes } from '../types';
+import { Translation } from '@alexandria/shared';
+import { TranslationDB, convertTranslationTypes } from '../types';
 
 const getAll = async function () {
   const results = await translationData.getAll();

@@ -20,7 +20,11 @@
     "noImplicitReturns": true,
     "noUnusedParameters": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@alexandria/shared": ["../shared/src"]
+    }
   },
-  "include": ["src", "src/components", "src/custom.d.ts"]
+  "include": ["src"]
 }

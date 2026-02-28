@@ -1,6 +1,6 @@
 import express from 'express';
 import translations from '../services/translations';
-import { Translation } from '../types';
+import { Translation } from '@alexandria/shared';
 
 const router = express.Router();
 

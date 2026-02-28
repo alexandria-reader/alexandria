@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import axios from 'axios';
-import { UserWord } from '../types';
+import { UserWord } from '@alexandria/shared';
 import getToken from '../utils/getToken';
 import host from './host';
 

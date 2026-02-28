@@ -4,10 +4,10 @@ import parseHTML from 'html-react-parser';
 
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import { UserWord } from '@alexandria/shared';
 import { userState } from '../states/recoil-states';
 
 import wordsService from '../services/words';
-import { UserWord } from '../types';
 
 const VocabularyTable = function ({
   userwords,

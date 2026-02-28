@@ -8,7 +8,8 @@ import { QueryResult } from 'pg';
 import sendmail from '../utils/sendmail';
 import userData from '../data-access/users';
 import textData from '../data-access/texts';
-import { SanitizedUser, User, convertUserTypes, UserDB } from '../types';
+import { SanitizedUser } from '@alexandria/shared';
+import { User, convertUserTypes, UserDB } from '../types';
 
 const sanitizeUser = function (user: User): SanitizedUser {
   const sanitizedUser: SanitizedUser = {

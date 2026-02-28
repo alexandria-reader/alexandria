@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Language } from '../types';
+import { Language } from '@alexandria/shared';
 import host from './host';
 
 const baseUrl = `${host}/api/languages`;

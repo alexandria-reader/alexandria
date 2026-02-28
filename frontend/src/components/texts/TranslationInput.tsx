@@ -7,6 +7,7 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import { useLocation } from 'react-router-dom';
+import { UserWord, Translation, UserTranslation } from '@alexandria/shared';
 import randomNumber from '../../utils/randomNumber';
 import {
   userwordsState,
@@ -17,7 +18,7 @@ import {
   currentdictionaryState,
 } from '../../states/recoil-states';
 
-import { UserWord, Status, Translation, UserTranslation } from '../../types';
+import { Status } from '../../types';
 
 import wordsService from '../../services/words';
 import translationServices from '../../services/translations';

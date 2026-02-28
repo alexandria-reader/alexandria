@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { Text, UserWord } from '@alexandria/shared';
 import {
   textlistState,
   currenttextState,
@@ -16,7 +17,6 @@ import {
 
 import Modal from './texts/DeleteTextModal';
 
-import { Text, UserWord } from '../types';
 
 import textsService from '../services/texts';
 import wordsService from '../services/words';

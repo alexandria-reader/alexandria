@@ -2,6 +2,7 @@
 import { TouchEvent, useState } from 'react';
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { UserWord } from '@alexandria/shared';
 import {
   markedwordsState,
   userwordsState,
@@ -9,7 +10,6 @@ import {
   currentwordContextState,
 } from '../../states/recoil-states';
 
-import { UserWord } from '../../types';
 
 import phraseFromSelection from '../../utils/phraseSelection';
 

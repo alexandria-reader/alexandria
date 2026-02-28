@@ -1,13 +1,14 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { Text } from '@alexandria/shared';
 import textsService from '../../services/texts';
 import {
   textlistState,
   textToEditState,
   userState,
 } from '../../states/recoil-states';
-import { ArticleData, Text } from '../../types';
+import { ArticleData } from '../../types';
 import urlService from '../../services/url';
 
 const TextForm = function () {

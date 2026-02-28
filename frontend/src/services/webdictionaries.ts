@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Webdictionary } from '../types';
+import { Webdictionary } from '@alexandria/shared';
 import host from './host';
 
 const baseUrl = `${host}/api/webdictionaries`;
