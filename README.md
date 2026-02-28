@@ -4,20 +4,32 @@ Read about how we made it [here](https://alexandria-reader.github.io/).
 
 Alexandria is accessible [here](https://tryalexandria.com/).
 
+# Project structure
+
+This is a monorepo with three packages:
+
+- `backend/` — Express + TypeScript API server
+- `frontend/` — React + Vite + TypeScript client
+- `shared/` — `@alexandria/shared` types used by both packages
+
+Managed with [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
+
 # Running Alexandria locally for development
 
-1. Follow the instructions here [https://docs.docker.com/get-docker/] to install Docker Desktop
-2. Clone this repo and the [frontend](https://github.com/alexandria-reader/frontend)
-3. Run `npm install` to install the dependencies
-4. Add a .`env` file to the root directory with the values from `src/model/.env.sample`
-5. Run `npm run start-docker-postgres`
-6. Run `npm run dev`
-7. Follow the getting started instructions in the frontend `README.md`
+1. Follow the instructions [here](https://docs.docker.com/get-docker/) to install Docker Desktop
+2. Clone this repo: `git clone git@github.com:alexandria-reader/alexandria.git`
+3. Run `npm install` from the root directory
+4. Add a `.env` file to `backend/` with the values from `backend/src/model/.env.sample`
+5. Add a `.env` file to `frontend/` (see `frontend/.env.vault` for the shape)
+6. Run `npm run docker:start` to start the database
+7. Run `npm run dev` to start both backend and frontend
+
+The backend runs on `http://localhost:3001` and the frontend on `http://localhost:3000`.
 
 # Testing
 
-To run the tests, run `npm run pgtest`. This command spins up a docker container with a fresh postgres database for the tests, runs the tests, and then shuts down the container. Just running `npm test` will cause the tests to fail if the docker container is not available.
+Run `npm test` from the root to run backend tests. This requires a running Postgres instance — use `npm run pgtest` to spin up a Docker container, run tests, and tear it down automatically.
 
 # Troubleshooting
 
-If, when getting the backend and frontend working together, you get a 500 error from the languages endpoint, make sure that the database is running locally and that the seed data is present. You can start the database by running `npm run start-docker-postgres`.
+If you get a 500 error from the languages endpoint, make sure the database is running and seeded. Start it with `npm run docker:start`.

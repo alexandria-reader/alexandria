@@ -1,0 +1,161 @@
+/* .userFields {
+  display: none;
+} */
+
+/* .App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+ul {
+  display: flex;
+  list-style-type: none;
+  font-size: 1.2rem;
+  align-items: center;
+}
+
+.Text-page {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+
+.single-text-page {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-input-div {
+  padding: 1rem;
+  width: 380px;
+  height: auto;
+  height: fit-content;
+  background-color: rgba(169, 169, 169, 0.459);
+  margin: 0 1rem;
+}
+
+.new-texts-div {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 1rem;
+}
+
+.new-text-form-div {
+  display: flex;
+  margin: 1rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-page {
+  margin: 3rem;
+}
+
+.login-wrapper {
+  display: flex;
+  margin: 3rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textList {
+  display: flex;
+  max-width: 100vw;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.text-item {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+  background-color: rgba(169, 169, 169, 0.418);
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.text-item a {
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.textList a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.newTextForm {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-div {
+  max-width: calc(100vw - 400px);
+  min-width: 350px;
+  padding: 1.5rem;
+  background-color: rgba(169, 169, 169, 0.479);
+}
+
+.change-status-div {
+  padding: 1rem;
+}
+
+.word-status-toolbar {
+  display: flex;
+}
+
+li {
+  margin-right: 10px;
+}
+
+.langForm {
+  display: flex;
+  flex-direction: column;
+  background-color: #61dafb;
+  width: 200px;
+  padding: 2rem;
+  position: absolute;
+  right: 0px;
+}
+
+.langForm button {
+  margin: 1rem;
+}
+
+.navBar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav-languages {
+  display: flex;
+} */

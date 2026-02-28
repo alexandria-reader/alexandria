@@ -1,87 +1,23 @@
 {
   "name": "alexandria",
-  "version": "0.1.0",
-  "description": "Learn languages by reading.",
-  "main": "build/server.js",
-  "engines": {
-    "node": "^16.13.x"
-  },
+  "private": true,
+  "workspaces": ["shared", "backend", "frontend"],
   "scripts": {
-    "build": "tsc",
-    "start": "node build/server.js",
-    "dev": "cross-env NODE_ENV=development ts-node-dev src/server.ts",
-    "local-dev": "npm run start-docker-postgres && npm run dev",
-    "staging": "cross-env NODE_ENV=staging ts-node-dev src/server.ts",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --collectCoverage",
-    "start-docker-postgres": "docker-compose -f postgres.yaml up -d",
-    "stop-docker-postgres": "docker-compose -f postgres.yaml down --volumes",
-    "pgtest": "npm run start-docker-postgres && npm test && npm run stop-docker-postgres",
-    "lint": "npx eslint --ext .ts",
-    "lint:fix": "npx eslint --ext .ts --fix",
-    "prettier": "npx prettier --write .",
-    "format": "npm run prettier && npm run lint:fix",
-    "tsc": "tsc",
-    "start:test": "cross-env NODE_ENV=test node index.js",
-    "prepare": "husky install"
-  },
-  "lint-staged": {
-    "src/**/*.{js,ts}": [
-      "prettier --write --ignore-unknown",
-      "git add"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alexandria-reader/backend.git"
-  },
-  "author": "Dana, Eamon, Marc",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alexandria-reader/backend/issues"
-  },
-  "homepage": "https://github.com/alexandria-reader/backend#readme",
-  "dependencies": {
-    "@hapi/boom": "^10.0.0",
-    "@sendgrid/mail": "^7.7.0",
-    "article-parser": "^7.2.4",
-    "bcrypt": "^5.1.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-async-errors": "^3.1.1",
-    "jsonwebtoken": "^8.5.1",
-    "pg": "^8.8.0",
-    "pg-format": "^1.0.4",
-    "tslib": "^2.4.0",
-    "typescript": "^4.8.4",
-    "uuid": "^9.0.0"
+    "dev": "concurrently \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\"",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "test": "npm run test --workspace=backend",
+    "docker:start": "docker-compose -f backend/postgres.yaml up -d",
+    "docker:stop": "docker-compose -f backend/postgres.yaml down --volumes",
+    "pgtest": "npm run docker:start && npm test && npm run docker:stop",
+    "lint": "npm run lint --workspace=backend",
+    "lint:fix": "npm run lint:fix --workspace=backend",
+    "prettier": "npm run prettier --workspace=backend",
+    "format": "npm run format --workspace=backend",
+    "tsc": "npm run tsc --workspace=backend"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
-    "@types/cors": "^2.8.12",
-    "@types/express": "^4.17.14",
-    "@types/jest": "^29.5.0",
-    "@types/jsonwebtoken": "^8.5.9",
-    "@types/pg": "^8.6.5",
-    "@types/pg-format": "^1.0.2",
-    "@types/supertest": "^2.0.12",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
-    "@typescript-eslint/parser": "^5.41.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.26.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.1",
-    "jest": "^29.5.0",
-    "lint-staged": "^13.0.3",
-    "prettier": "2.7.1",
-    "supertest": "^6.3.1",
-    "ts-jest": "^29.0.3",
-    "ts-node": "^10.9.1",
-    "ts-node-dev": "^2.0.0"
+    "concurrently": "^8.0.0"
   }
 }

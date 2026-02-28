@@ -1,0 +1,17 @@
+# Use postgres/example user/password credentials
+version: '3.8'
+
+services:
+  testdb_postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test
+    ports:
+      - 8080:5432
+    volumes:
+      - "./src/model/schema.sql:/docker-entrypoint-initdb.d/schema.sql"
+      - "./src/model/seed.sql:/docker-entrypoint-initdb.d/seed.sql"
+      
