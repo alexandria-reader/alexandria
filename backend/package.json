@@ -1,5 +1,5 @@
 {
-  "name": "alexandria",
+  "name": "@alexandria/backend",
   "version": "0.1.0",
   "description": "Learn languages by reading.",
   "main": "build/server.js",
@@ -21,8 +21,7 @@
     "prettier": "npx prettier --write .",
     "format": "npm run prettier && npm run lint:fix",
     "tsc": "tsc",
-    "start:test": "cross-env NODE_ENV=test node index.js",
-    "prepare": "husky install"
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "lint-staged": {
     "src/**/*.{js,ts}": [

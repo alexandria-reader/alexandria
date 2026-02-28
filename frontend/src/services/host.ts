@@ -1,5 +1,4 @@
-export default process.env.NODE_ENV === 'development' ||
-process.env.NODE_ENV === 'test' ||
-process.env.CONTEXT === 'deploy-preview'
-  ? process.env.REACT_APP_DEV_DB
-  : process.env.REACT_APP_PROD_DB;
+export default import.meta.env.DEV ||
+import.meta.env.VITE_CONTEXT === 'deploy-preview'
+  ? import.meta.env.VITE_DEV_DB
+  : import.meta.env.VITE_PROD_DB;

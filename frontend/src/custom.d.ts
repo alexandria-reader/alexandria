@@ -1,5 +1,6 @@
+/// <reference types="vite/client" />
+
 declare module '*.svg' {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const content: any;
+  const content: string;
   export default content;
 }

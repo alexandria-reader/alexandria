@@ -22,8 +22,6 @@ import Privacy from './components/Privacy';
 import './index.css';
 import './App.css';
 
-<link href="/dist/output.css" rel="stylesheet"></link>;
-
 const rootElement = document.getElementById('root')!;
 const root = createRoot(rootElement);
 
