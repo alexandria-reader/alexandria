@@ -70,7 +70,7 @@ const addNew = async function (
   learnLanguageId: string
 ): Promise<SanitizedUser> {
   const emailExists = await userData.getByEmail(email);
-  if (emailExists.rowCount > 0)
+  if ((emailExists.rowCount ?? 0) > 0)
     throw boom.notAcceptable('Email already in use.');
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -150,7 +150,7 @@ const remove = async function (
 ): Promise<SanitizedUser | undefined> {
   const result = await userData.remove(userId);
 
-  if (result.rowCount > 0) {
+  if ((result.rowCount ?? 0) > 0) {
     const deletedUser: User = result.rows[0];
     return sanitizeUser(deletedUser);
   }

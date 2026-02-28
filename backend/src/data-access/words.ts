@@ -126,7 +126,7 @@ const addNew = async function (wordObject: Word): Promise<QueryResult> {
   const { languageId, word } = wordObject;
 
   const existingWord = await getWordInLanguage(word, languageId);
-  if (existingWord.rowCount > 0) {
+  if ((existingWord.rowCount ?? 0) > 0) {
     return existingWord;
   }
 
@@ -163,7 +163,7 @@ const addStatus = async function (
 ): Promise<QueryResult> {
   const existingStatus = await getStatus(wordId, userId);
 
-  if (existingStatus.rowCount > 0) {
+  if ((existingStatus.rowCount ?? 0) > 0) {
     return existingStatus;
   }
 

@@ -11,7 +11,8 @@ const verifyLoginDetails = async function (
   password: string
 ): Promise<UserDB> {
   const result = await userData.getByEmail(email);
-  const user: UserDB | null = result.rowCount > 0 ? result.rows[0] : null;
+  const user: UserDB | null =
+    (result.rowCount ?? 0) > 0 ? result.rows[0] : null;
 
   const passwordsMatch: boolean = user
     ? await bcrypt.compare(password, user.password_hash)
