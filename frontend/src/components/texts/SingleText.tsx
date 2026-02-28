@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useSetAtom, useAtomValue } from 'jotai';
 import {
   userwordsState,
   currenttextState,
@@ -21,9 +21,9 @@ import demoText from '../../utils/demoText';
 import demoUserWords from '../../utils/demoWords';
 
 const SingleText = function () {
-  const [currentText, setCurrentText] = useRecoilState(currenttextState);
-  const setUserWords = useSetRecoilState(userwordsState);
-  const user = useRecoilValue(userState);
+  const [currentText, setCurrentText] = useAtom(currenttextState);
+  const setUserWords = useSetAtom(userwordsState);
+  const user = useAtomValue(userState);
   const params = useParams();
   const [error, setError] = useState('');
   const location = useLocation();
@@ -44,7 +44,7 @@ const SingleText = function () {
         const text = await textsService.getTextById(params.textId);
         setCurrentText(text);
         fetchUserwords();
-      } catch (e) {
+      } catch (_e) {
         setError('error');
       }
     }
@@ -77,7 +77,7 @@ const SingleText = function () {
         key={`text-id:${currentText.id}outer`}
         className="h-[calc(100vh-4rem)] overflow-hidden flex flex-col bg-secondary mx-auto max-w-7xl lg:px-8"
       >
-        <div className="flex-1 min-h-0 grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr,400px] md:gap-8 lg:grid-flow-col-dense">
+        <div className="flex-1 min-h-0 grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr_400px] md:gap-8 lg:grid-flow-col-dense">
           <TextBody
             key={`text-id:${currentText.id}unique`}
             title={currentText.title}
@@ -97,7 +97,7 @@ const SingleText = function () {
     return (
       <main className="h-[calc(100vh-4rem)] overflow-hidden flex flex-col mx-auto max-w-7xl lg:px-8">
         <div className="flex-1 min-h-0 bg-secondary">
-          <div className="h-full grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr,400px] md:gap-8 lg:grid-flow-col-dense">
+          <div className="h-full grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr_400px] md:gap-8 lg:grid-flow-col-dense">
             <TextBody
               title={demoText.title}
               textBody={demoText.body}

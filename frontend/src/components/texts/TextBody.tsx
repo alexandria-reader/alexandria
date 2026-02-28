@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   useState,
   useEffect,
@@ -7,7 +6,7 @@ import {
   useLayoutEffect,
   useMemo,
 } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   currentwordContextState,
   currentwordState,
@@ -61,7 +60,6 @@ function sliceSentenceByWords(
   let endCharIdx = text.length;
   let match: RegExpExecArray | null;
 
-  // eslint-disable-next-line no-cond-assign
   while ((match = regex.exec(text)) !== null) {
     if (count === fromLocalWord) {
       startCharIdx = match.index;
@@ -150,9 +148,9 @@ const TextBody = function ({
   savedWordIndex: number;
   textId: number;
 }) {
-  const [currentWord, setCurrentWord] = useRecoilState(currentwordState);
-  const [userWords, setUserWords] = useRecoilState(userwordsState);
-  const setCurrentWordContext = useSetRecoilState(currentwordContextState);
+  const [currentWord, setCurrentWord] = useAtom(currentwordState);
+  const [userWords, setUserWords] = useAtom(userwordsState);
+  const setCurrentWordContext = useSetAtom(currentwordContextState);
 
   // Build flat sentence list from paragraphs
   const { allSentences, totalWordCount } = useMemo(() => {
@@ -535,7 +533,7 @@ const TextBody = function ({
         ref={containerRef}
         className={`flex flex-col h-full overflow-hidden container mx-auto prose max-w-none dark:prose-invert p-4 md:col-span-1 md:col-start-1 bg-tertiary px-4 py-5 shadow sm:rounded-lg sm:px-6 ${
           currentWord && window.innerWidth < 768
-            ? 'blur-sm bg-gray-300 dark:bg-gray-600'
+            ? 'blur-xs bg-gray-300 dark:bg-gray-600'
             : ''
         }`}
       >
@@ -612,7 +610,7 @@ const TextBody = function ({
                 if (currentPage > 0) goToPage(currentPage - 1);
               }}
               disabled={currentPage === 0}
-              className="hidden md:inline-flex items-center justify-center w-7 h-7 rounded text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-default transition-colors"
+              className="hidden md:inline-flex items-center justify-center w-7 h-7 rounded-sm text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-default transition-colors"
             >
               &#8249;
             </button>
@@ -628,7 +626,7 @@ const TextBody = function ({
                 if (currentPage < totalPages - 1) goToPage(currentPage + 1);
               }}
               disabled={currentPage >= totalPages - 1}
-              className="hidden md:inline-flex items-center justify-center w-7 h-7 rounded text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-default transition-colors"
+              className="hidden md:inline-flex items-center justify-center w-7 h-7 rounded-sm text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-default transition-colors"
             >
               &#8250;
             </button>

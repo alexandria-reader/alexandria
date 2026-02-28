@@ -1,10 +1,10 @@
 import { Navigate, useLocation } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { userState } from '../states/recoil-states';
 // import getToken from '../utils/getToken';
 
 export default function RequireAuth({ children }: { children: JSX.Element }) {
-  const user = useRecoilValue(userState);
+  const user = useAtomValue(userState);
 
   const location = useLocation();
 

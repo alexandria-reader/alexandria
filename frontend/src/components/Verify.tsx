@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { userState } from '../states/recoil-states';
 
 import userServices from '../services/users';
@@ -10,7 +9,7 @@ import getToken from '../utils/getToken';
 import verify from '../services/verify';
 
 export default function Verified() {
-  const [user, setUser] = useRecoilState(userState);
+  const [user, setUser] = useAtom(userState);
   const [sent, setSent] = useState(false);
 
   const setVerification = async function () {
@@ -50,12 +49,12 @@ export default function Verified() {
                   learning.
                 </p>
               </div>
-              <div className="lg:mt-0 lg:flex-shrink-0">
-                <div className="mt-12 inline-flex rounded-md shadow">
+              <div className="lg:mt-0 lg:shrink-0">
+                <div className="mt-12 inline-flex rounded-md shadow-sm">
                   <Link to="/texts">
                     <button
                       type="button"
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                     >
                       Go to texts
                     </button>
@@ -92,8 +91,8 @@ export default function Verified() {
                   If you cannot find it, click the link to resend the email.
                 </p>
               </div>
-              <div className="lg:mt-0 lg:flex-shrink-0">
-                <div className="mt-12 inline-flex rounded-md shadow">
+              <div className="lg:mt-0 lg:shrink-0">
+                <div className="mt-12 inline-flex rounded-md shadow-sm">
                   {sent === false ? (
                     <button
                       type="button"
@@ -101,7 +100,7 @@ export default function Verified() {
                         event.preventDefault();
                         sendMail();
                       }}
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                     >
                       Resend email
                     </button>
@@ -114,11 +113,11 @@ export default function Verified() {
                     </button>
                   )}
                 </div>
-                <div className="mt-12 ml-8 inline-flex rounded-md shadow">
+                <div className="mt-12 ml-8 inline-flex rounded-md shadow-sm">
                   <Link to="/texts">
                     <button
                       type="button"
-                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-fuchsia-800 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                      className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-fuchsia-800 hover:bg-fuchsia-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                     >
                       Look around
                     </button>

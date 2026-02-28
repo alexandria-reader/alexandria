@@ -1,7 +1,6 @@
-/* eslint-disable max-len */
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtom } from 'jotai';
 import { userState } from '../../states/recoil-states';
 
 import loginService from '../../services/login';
@@ -9,7 +8,7 @@ import logo from '../../assets/logo/logo-light.png';
 import logoDark from '../../assets/logo/logo-dark.png';
 
 export default function LoginForm({ from }: { from: string }) {
-  const setUser = useSetRecoilState(userState);
+  const setUser = useSetAtom(userState);
 
   const {
     register,
@@ -49,7 +48,7 @@ export default function LoginForm({ from }: { from: string }) {
 
   return (
     <div className="min-h-full flex items-center gap-6 justify-center py-12 px-6 sm:px-8 lg:px-10">
-      <div className="max-w-7x dark:shadow dark:bg-tertiary sm:rounded-md mx-auto py-8 px-4 sm:py-6 sm:px-6 lg:px-8">
+      <div className="max-w-7x dark:shadow-sm dark:bg-tertiary sm:rounded-md mx-auto py-8 px-4 sm:py-6 sm:px-6 lg:px-8">
         <div className="">
           <img
             className="mx-auto dark:hidden h-24 w-auto"
@@ -76,7 +75,7 @@ export default function LoginForm({ from }: { from: string }) {
             </label>
             <input
               {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-              className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-700 focus:border-sky-700 focus:z-10 sm:text-sm"
+              className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-700 focus:border-sky-700 focus:z-10 sm:text-sm"
               placeholder="Email"
               autoComplete="email"
               type="email"
@@ -101,7 +100,7 @@ export default function LoginForm({ from }: { from: string }) {
             </label>
             <input
               {...register('password', { required: true })}
-              className="input appearance-none rounded-md relative block bg-four w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-sky-700 focus:border-sky-700 focus:z-10 sm:text-sm"
+              className="input appearance-none rounded-md relative block bg-four w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-sky-700 focus:border-sky-700 focus:z-10 sm:text-sm"
               autoComplete="current-password"
               placeholder="Password"
               type="password"
@@ -124,7 +123,7 @@ export default function LoginForm({ from }: { from: string }) {
             <button
               id="submitButton"
               type="submit"
-              className="loginButton group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+              className="loginButton group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-600 hover:bg-sky-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
             >
               Log in
             </button>

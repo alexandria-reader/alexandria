@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useAtomValue } from 'jotai';
 import { languagesState, userState } from '../states/recoil-states';
 import languageServices from '../services/languages';
 
@@ -12,8 +12,8 @@ import logo from '../assets/logo/logo-light.png';
 import logoDark from '../assets/logo/logo-dark.png';
 
 export default function Settings() {
-  const user = useRecoilValue(userState);
-  const [, setLanguages] = useRecoilState(languagesState);
+  const user = useAtomValue(userState);
+  const [, setLanguages] = useAtom(languagesState);
 
   const getLanguageListFromServer = async function () {
     const dbLanguages = await languageServices.getAllLanguages();

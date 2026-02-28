@@ -1,9 +1,8 @@
-/* eslint-disable max-len */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useAtom, useSetAtom, useAtomValue } from 'jotai';
 import { LoggedInUser } from '@alexandria/shared';
 import {
   languagesState,
@@ -23,10 +22,10 @@ import logoDark from '../assets/logo/logo-dark.png';
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const [languages, setLanguages] = useRecoilState(languagesState);
-  const flags = useRecoilValue(languageFlagsState);
-  const names = useRecoilValue(languageNamesState);
-  const setUser = useSetRecoilState(userState);
+  const [languages, setLanguages] = useAtom(languagesState);
+  const flags = useAtomValue(languageFlagsState);
+  const names = useAtomValue(languageNamesState);
+  const setUser = useSetAtom(userState);
 
   const {
     register,
@@ -58,7 +57,7 @@ export default function SignUp() {
   return (
     <main className="container mx-auto mb-auto">
       <div className="min-h-full flex items-center justify-center py-12 px-6 sm:px-8 lg:px-10">
-        <div className="max-w-md dark:shadow dark:bg-tertiary py-8 px-4 sm:py-6 sm:px-6 w-fit flex flex-col gap-6">
+        <div className="max-w-md dark:shadow-sm dark:bg-tertiary py-8 px-4 sm:py-6 sm:px-6 w-fit flex flex-col gap-6">
           <div className="">
             <img
               className="mx-auto dark:hidden h-24 w-auto"
@@ -142,7 +141,7 @@ export default function SignUp() {
                 })}
                 id="username"
                 placeholder=""
-                className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary rounded-t-md focus:outline-none focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary rounded-t-md focus:outline-hidden focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
                 autoComplete="name"
                 type="text"
               />
@@ -170,7 +169,7 @@ export default function SignUp() {
                   pattern: /^\S+@\S+$/i,
                 })}
                 autoComplete="email"
-                className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
+                className="input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
                 type="email"
               />
               {errors.email?.type === 'required' && (
@@ -202,7 +201,7 @@ export default function SignUp() {
                   required: true,
                   pattern: /^.{6,}$/,
                 })}
-                className="input appearance-none relative block w-full px-3 py-2 border bg-four dark:border-transparent rounded-md border-gray-300 placeholder-gray-500 text-tertiary rounded-b-md focus:outline-none focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
+                className="input appearance-none relative block w-full px-3 py-2 border bg-four dark:border-transparent rounded-md border-gray-300 placeholder-gray-500 text-tertiary rounded-b-md focus:outline-hidden focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
                 autoComplete="new-password"
                 type="password"
               />
@@ -228,7 +227,7 @@ export default function SignUp() {
                 <select
                   title="language to translate into"
                   {...register('knownLanguageId')}
-                  className="knownLanguageId input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
+                  className="knownLanguageId input bg-four dark:border-transparent rounded-md appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
                 >
                   {languages.map((lang) => (
                     <option key={lang.id} value={lang.id}>
@@ -247,7 +246,7 @@ export default function SignUp() {
                 <select
                   title="language to learn"
                   {...register('learnLanguageId')}
-                  className="learnLanguageId input appearance-none bg-four dark:border-transparent rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-none focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
+                  className="learnLanguageId input appearance-none bg-four dark:border-transparent rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-tertiary focus:outline-hidden focus:ring-fuchsia-700 focus:border-fuchsia-700 focus:z-10 sm:text-sm"
                 >
                   {languages.map((lang) => (
                     <option key={lang.id} value={lang.id}>
@@ -282,7 +281,7 @@ export default function SignUp() {
               </div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 my-4 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-fuchsia-900 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-700"
+                className="group relative w-full flex justify-center py-2 my-4 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-fuchsia-900 hover:bg-fuchsia-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-700"
               >
                 Sign up
               </button>

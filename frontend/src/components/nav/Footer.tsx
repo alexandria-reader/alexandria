@@ -1,14 +1,13 @@
-/* eslint-disable max-len */
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { userState } from '../../states/recoil-states';
 
 export default function Footer() {
-  const user = useRecoilValue(userState);
+  const user = useAtomValue(userState);
 
   return (
     <footer className="bg-primary w-full py-8 mt-10 md:text-lg text-md">
       <div className="md:mx-14 lg:mx-48 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-screen-xl px-4 md:px-10 sm:px-6 lg:px-14 mx-auto flex flex-col items-center">
+        <div className="max-w-(--breakpoint-xl) px-4 md:px-10 sm:px-6 lg:px-14 mx-auto flex flex-col items-center">
           <ul className="md:text-lg text-md max-w-lg font-light flex flex-row gap-x-12 md:gap-x-20 justify-between">
             {user && (
               <li className="my-2 flex justify-center">

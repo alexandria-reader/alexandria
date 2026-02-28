@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable max-len */
 import parseHTML from 'html-react-parser';
 
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
 import { UserWord } from '@alexandria/shared';
 import { userState } from '../states/recoil-states';
 
@@ -55,7 +53,7 @@ const VocabularyTable = function ({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pt-8 sm:px-6 lg:px-8 overflow-x-auto">
-        <div className="shadow overflow-x-auto border-b border-gray-200 dark:border-gray-700 sm:rounded-lg">
+        <div className="shadow-sm overflow-x-auto border-b border-gray-200 dark:border-gray-700 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr className="flex md:table-row flex-wrap">
@@ -142,7 +140,7 @@ const VocabularyTable = function ({
 
 const Vocabulary = function () {
   const [userwords, setUserwords] = useState<Array<UserWord>>([]);
-  const user = useRecoilValue(userState);
+  const user = useAtomValue(userState);
 
   const fetchUserwords = async function () {
     if (user) {
