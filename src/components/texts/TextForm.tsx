@@ -26,9 +26,10 @@ const TextForm = function () {
   const fetchUserTexts = async function () {
     if (user) {
       const userTextsResponse = await textsService.getAllUserTextsByLanguage(
-        user.learnLanguageId
+        user.learnLanguageId,
+        1
       );
-      setTextList(userTextsResponse);
+      setTextList(userTextsResponse.data);
     }
   };
 

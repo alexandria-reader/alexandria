@@ -50,6 +50,17 @@ const SingleText = function () {
     }
   };
 
+  // Hide footer and lock body scroll while reading
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const footer = document.querySelector('footer');
+    if (footer) footer.style.display = 'none';
+    return () => {
+      document.body.style.overflow = '';
+      if (footer) footer.style.display = '';
+    };
+  }, []);
+
   useEffect(() => {
     if (currentText) {
       fetchUserwords();
@@ -64,15 +75,19 @@ const SingleText = function () {
     return (
       <div
         key={`text-id:${currentText.id}outer`}
-        className="bg-secondary mx-auto max-w-7xl lg:px-8"
+        className="h-[calc(100vh-4rem)] overflow-hidden flex flex-col bg-secondary mx-auto max-w-7xl lg:px-8"
       >
-        <div className="grid grid-cols-1 md:grid-cols-[1fr, 400px] md:gap-8 my-8 lg:grid-flow-col-dense">
+        <div className="flex-1 min-h-0 grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr,400px] md:gap-8 lg:grid-flow-col-dense">
           <TextBody
             key={`text-id:${currentText.id}unique`}
             title={currentText.title}
-            textBody={`${currentText.title}. \n${currentText.body}`}
+            textBody={currentText.body}
+            savedWordIndex={currentText.pageStartWordIndex ?? 0}
+            textId={Number(currentText.id)}
           />
-          <TranslationInput />
+          <div className="overflow-y-auto">
+            <TranslationInput />
+          </div>
         </div>
       </div>
     );
@@ -80,14 +95,18 @@ const SingleText = function () {
 
   if (location.pathname === '/demo') {
     return (
-      <main className="container mx-auto mb-auto">
-        <div className="bg-secondary mx-auto max-w-7xl lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr, 400px] md:gap-8 my-8 lg:grid-flow-col-dense">
+      <main className="h-[calc(100vh-4rem)] overflow-hidden flex flex-col mx-auto max-w-7xl lg:px-8">
+        <div className="flex-1 min-h-0 bg-secondary">
+          <div className="h-full grid grid-rows-[1fr] grid-cols-1 md:grid-cols-[1fr,400px] md:gap-8 lg:grid-flow-col-dense">
             <TextBody
               title={demoText.title}
-              textBody={`${demoText.title}. \n${demoText.body}`}
+              textBody={demoText.body}
+              savedWordIndex={0}
+              textId={0}
             />
-            <TranslationInput />
+            <div className="overflow-y-auto">
+              <TranslationInput />
+            </div>
           </div>
         </div>
       </main>

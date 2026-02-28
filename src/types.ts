@@ -23,6 +23,14 @@ export type Text = {
   sourceType?: string | null;
   uploadTime?: Date;
   isPublic?: boolean;
+  pageStartWordIndex?: number;
+};
+
+export type ReadingProgress = {
+  userId: number;
+  textId: number;
+  pageStartWordIndex: number;
+  updatedAt: string;
 };
 
 export type Language = {
@@ -80,4 +88,13 @@ export type ArticleData = {
   source: string; // original publisher
   links: string[]; // list of alternative links
   ttr: number; // time to read in second, 0 = unknown
+};
+
+export type TextPagination = {
+  currentPage: number;
+  nextPage: number;
+  prevPage: number;
+  data: Text[];
+  totalPages: number;
+  totalTexts: number;
 };

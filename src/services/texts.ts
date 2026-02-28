@@ -1,18 +1,24 @@
 import axios from 'axios';
-import { Text } from '../types';
+import { Text, TextPagination, ReadingProgress } from '../types';
 import getToken from '../utils/getToken';
 import host from './host';
 
 const baseUrl = `${host}/api/texts`;
 
-const getAllUserTextsByLanguage = async function (languageId: string) {
+const getAllUserTextsByLanguage = async function (
+  languageId: string,
+  pageNumber: number
+): Promise<TextPagination> {
   const token = getToken();
 
-  const response = await axios.get(`${baseUrl}/language/${languageId}`, {
-    headers: { Authorization: `bearer ${token}` },
-  });
+  const response = await axios.get(
+    `${baseUrl}/language/${languageId}/${pageNumber}`,
+    {
+      headers: { Authorization: `bearer ${token}` },
+    }
+  );
 
-  const texts: Array<Text> = response.data;
+  const texts: TextPagination = response.data;
   return texts;
 };
 
@@ -63,10 +69,28 @@ const removeTextFromServer = async function (id: number) {
   return response.data;
 };
 
+const saveReadingProgress = async function (
+  textId: number,
+  pageStartWordIndex: number
+): Promise<ReadingProgress> {
+  const token = getToken();
+
+  const response = await axios.put(
+    `${baseUrl}/${textId}/progress`,
+    { pageStartWordIndex },
+    {
+      headers: { Authorization: `bearer ${token}` },
+    }
+  );
+
+  return response.data;
+};
+
 export default {
   getAllUserTextsByLanguage,
   getTextById,
   postNewText,
   removeTextFromServer,
   updateText,
+  saveReadingProgress,
 };
