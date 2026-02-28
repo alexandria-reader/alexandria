@@ -243,3 +243,34 @@ export type TextPagination = {
   totalPages: number;
   totalTexts: number;
 };
+
+export type ReadingProgress = {
+  userId: number;
+  textId: number;
+  pageStartWordIndex: number;
+  updatedAt: Date;
+};
+
+export type ReadingProgressDB = {
+  user_id: number;
+  text_id: number;
+  page_start_word_index: number;
+  updated_at: string;
+};
+
+export const convertReadingProgressTypes = function (
+  dbItem: ReadingProgressDB
+): ReadingProgress {
+  const {
+    user_id: userId,
+    text_id: textId,
+    page_start_word_index: pageStartWordIndex,
+    updated_at: updatedAt,
+  } = dbItem;
+  return {
+    userId,
+    textId,
+    pageStartWordIndex,
+    updatedAt: new Date(updatedAt),
+  };
+};

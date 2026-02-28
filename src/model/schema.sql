@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS users_words;
 DROP TABLE IF EXISTS users_translations;
 DROP TABLE IF EXISTS webdictionaries;
 DROP TABLE IF EXISTS translations;
+DROP TABLE IF EXISTS reading_progress;
 DROP TABLE IF EXISTS texts;
 DROP TABLE IF EXISTS words;
 DROP TABLE IF EXISTS admins;
@@ -119,4 +120,12 @@ CREATE TABLE match_girl (
     language_id varchar(4) PRIMARY KEY REFERENCES languages (id) ON DELETE CASCADE,
     title text NOT NULL,
     body text NOT NULL
+);
+
+CREATE TABLE reading_progress (
+    user_id int NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    text_id int NOT NULL REFERENCES texts (id) ON DELETE CASCADE,
+    page_start_word_index int NOT NULL DEFAULT 0,
+    updated_at timestamptz DEFAULT now(),
+    PRIMARY KEY (user_id, text_id)
 );
