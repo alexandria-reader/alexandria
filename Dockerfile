@@ -31,4 +31,4 @@ COPY --from=build /app/shared/dist shared/dist
 COPY --from=build /app/backend/build backend/build
 
 EXPOSE 3000
-CMD ["node", "backend/build/server.js"]
+CMD ["node", "backend/build/backend/src/server.js"]
