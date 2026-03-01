@@ -23,7 +23,7 @@ const add = async function (
   );
 
   if (result.rowCount === 0)
-    throw boom.notFound('Adding new translation not successful.');
+    throw boom.internal('Adding new translation not successful.');
 
   return convertTranslationTypes(result.rows[0]);
 };
@@ -38,7 +38,7 @@ const update = async function (
   );
 
   if (result.rowCount === 0)
-    throw boom.notFound(
+    throw boom.internal(
       'Updating translation with given translation id not successful.'
     );
 
@@ -64,7 +64,7 @@ const remove = async function (translationId: number) {
   const result: QueryResult = await translationData.remove(translationId);
 
   if (result.rowCount === 0)
-    throw boom.notFound('Removing translation not successful.');
+    throw boom.internal('Removing translation not successful.');
 
   return convertTranslationTypes(result.rows[0]);
 };
@@ -81,7 +81,7 @@ const addToUsersTranslations = async function (
   );
 
   if (result.rowCount === 0)
-    throw boom.notFound('Connecting user and translation not successful.');
+    throw boom.internal('Connecting user and translation not successful.');
 
   return result.rows[0].context;
 };

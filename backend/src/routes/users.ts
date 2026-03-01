@@ -1,3 +1,4 @@
+import boom from '@hapi/boom';
 import express from 'express';
 import users from '../services/users';
 import { getUserFromToken } from '../utils/middleware';
@@ -13,11 +14,13 @@ userRouter.get('/from-token', getUserFromToken, async (_req, res) => {
 userRouter.get('/', getUserFromToken, async (_req, res) => {
   const { user } = res.locals;
   const isAdmin = await users.isAdmin(+user.id);
-  if (isAdmin) {
-    const response = await users.getAll();
-    res.json(response);
+
+  if (!isAdmin) {
+    throw boom.forbidden('Admin access required.');
   }
-  res.status(404).send();
+
+  const response = await users.getAll();
+  res.json(response);
 });
 
 userRouter.post('/confirm', getUserFromToken, async (req, res) => {

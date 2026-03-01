@@ -1,7 +1,7 @@
 import boom from '@hapi/boom';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { QueryResult } from 'pg';
 
 import sendmail from '../utils/sendmail';
@@ -9,6 +9,7 @@ import userData from '../data-access/users';
 import textData from '../data-access/texts';
 import { SanitizedUser } from '@alexandria/shared';
 import { User, convertUserTypes, UserDB } from '../types';
+import env from '../lib/env';
 
 const sanitizeUser = function (user: User): SanitizedUser {
   const sanitizedUser: SanitizedUser = {
@@ -72,7 +73,7 @@ const addNew = async function (
 ): Promise<SanitizedUser> {
   const emailExists = await userData.getByEmail(email);
   if ((emailExists.rowCount ?? 0) > 0)
-    throw boom.notAcceptable('Email already in use.');
+    throw boom.conflict('Email already in use.');
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const verificationCode = uuidv4();
@@ -88,7 +89,7 @@ const addNew = async function (
   if (newUser.id) {
     await textData.addMatchGirlToUser(newUser.id, learnLanguageId);
   }
-  if (process.env.NODE_ENV !== 'test') {
+  if (env.NODE_ENV !== 'test') {
     const emailSent = await sendmail.sendVerificationEmail(
       verificationCode,
       email,
@@ -109,7 +110,7 @@ const updateUserInfo = async function (
   email: string
 ): Promise<SanitizedUser> {
   const result = await userData.updateUserInfo(userId, userName, email);
-  if (result.rowCount === 0) throw boom.notAcceptable('Something went wrong');
+  if (result.rowCount === 0) throw boom.internal('Something went wrong');
   const updatedUser: User = convertUserTypes(result.rows[0]);
   return sanitizeUser(updatedUser);
 };
@@ -120,24 +121,26 @@ const updatePassword = async function (
   newPassword: string
 ): Promise<{ message: string }> {
   if (!currentPassword) {
-    throw boom.notAcceptable('You must submit your current password.');
+    throw boom.badRequest('You must submit your current password.');
   } else if (!newPassword) {
-    throw boom.notAcceptable('You must submit a new password.');
+    throw boom.badRequest('You must submit a new password.');
   }
 
   const passwordsMatch = await verifyPassword(userId, currentPassword);
 
-  if (passwordsMatch) {
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(newPassword, saltRounds);
-    const result = await userData.updatePassword(userId, passwordHash);
-
-    if (result.rowCount === 1) {
-      return { message: 'Your password has been updated' };
-    }
+  if (!passwordsMatch) {
+    throw boom.unauthorized('Incorrect password.');
   }
 
-  throw boom.notAcceptable('Incorrect password.');
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+  const result = await userData.updatePassword(userId, passwordHash);
+
+  if (result.rowCount !== 1) {
+    throw boom.internal('Failed to update password.');
+  }
+
+  return { message: 'Your password has been updated' };
 };
 
 const setUserLanguages = async function (
@@ -151,7 +154,7 @@ const setUserLanguages = async function (
     userId
   );
 
-  if (result.rowCount === 0) throw boom.notAcceptable('Something went wrong');
+  if (result.rowCount === 0) throw boom.internal('Something went wrong');
   const updatedUser: User = convertUserTypes(result.rows[0]);
   return sanitizeUser(updatedUser);
 };
@@ -166,14 +169,14 @@ const remove = async function (
     return sanitizeUser(deletedUser);
   }
 
-  throw boom.unauthorized('Something went wrong');
+  throw boom.internal('Failed to delete user.');
 };
 
 const verify = async function (
   code: string,
   token: string
 ): Promise<SanitizedUser> {
-  const decodedToken = jwt.verify(token, process.env.SECRET as Secret);
+  const decodedToken = jwt.verify(token, env.SECRET);
 
   if (typeof decodedToken === 'string') {
     let result: QueryResult = await userData.getByEmail(decodedToken);

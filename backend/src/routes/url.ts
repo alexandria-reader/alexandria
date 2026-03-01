@@ -1,19 +1,29 @@
-import { ArticleData, extract } from 'article-parser';
+import boom from '@hapi/boom';
+import { extract } from 'article-parser';
 import express from 'express';
 
 const router: express.Router = express.Router();
 
 router.post('/', async (req, res) => {
   const { url } = req.body;
-  const timer = setTimeout(() => res.status(204).send(), 2000);
+  let responded = false;
+
+  const timer = setTimeout(() => {
+    responded = true;
+    res.status(204).send();
+  }, 2000);
 
   try {
-    const article: ArticleData = await extract(url);
-    // TODO: investigate Trace: Error: Cannot set headers after they are sent to the client error
+    const article = await extract(url);
     clearTimeout(timer);
-    res.json(article);
+    if (!responded) {
+      res.json(article);
+    }
   } catch (error) {
-    console.trace(error);
+    clearTimeout(timer);
+    if (!responded) {
+      throw boom.badRequest('Could not extract article from URL.');
+    }
   }
 });
 

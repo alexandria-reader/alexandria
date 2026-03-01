@@ -86,7 +86,7 @@ const getWordInLanguage = async function (
 const addNew = async function (wordObject: Word): Promise<Word> {
   const result: QueryResult = await wordData.addNew(wordObject);
 
-  if (result.rowCount === 0) throw boom.badRequest('Could not add new word.');
+  if (result.rowCount === 0) throw boom.internal('Could not add new word.');
 
   return convertWordTypes(result.rows[0]);
 };
@@ -97,8 +97,7 @@ const getStatus = async function (
 ): Promise<string> {
   const result: QueryResult = await wordData.getStatus(wordId, userId);
 
-  if (result.rowCount === 0)
-    throw boom.badRequest('Could not get word status.');
+  if (result.rowCount === 0) throw boom.notFound('Could not get word status.');
 
   return result.rows[0].word_status;
 };
@@ -115,7 +114,7 @@ const addStatus = async function (
   );
 
   if (result.rowCount === 0)
-    throw boom.badRequest('Could not add status to word.');
+    throw boom.internal('Could not add status to word.');
 
   return result.rows[0].word_status;
 };
@@ -170,7 +169,7 @@ const updateStatus = async function (
   );
 
   if (result.rowCount === 0)
-    throw boom.badRequest('Could not update word status.');
+    throw boom.internal('Could not update word status.');
 
   return result.rows[0].word_status;
 };
@@ -178,7 +177,7 @@ const updateStatus = async function (
 const remove = async function (wordId: number): Promise<Word> {
   const result: QueryResult = await wordData.remove(wordId);
 
-  if (result.rowCount === 0) throw boom.badRequest('Could not remove word.');
+  if (result.rowCount === 0) throw boom.internal('Could not remove word.');
 
   return convertWordTypes(result.rows[0]);
 };
@@ -189,7 +188,7 @@ const removeUserWord = async function (
 ): Promise<string> {
   const result: QueryResult = await wordData.removeUserWord(wordId, userId);
 
-  if (result.rowCount === 0) throw boom.badRequest('Could not remove status.');
+  if (result.rowCount === 0) throw boom.internal('Could not remove status.');
 
   return result.rows[0].word_status;
 };

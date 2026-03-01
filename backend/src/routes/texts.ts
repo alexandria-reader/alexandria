@@ -1,3 +1,4 @@
+import boom from '@hapi/boom';
 import express from 'express';
 import texts from '../services/texts';
 import readingProgress from '../services/reading-progress';
@@ -23,38 +24,37 @@ router.get('/:id', async (req, res): Promise<void> => {
 
   const textById: Text = await texts.getById(Number(id), Number(user.id));
 
-  if (textById.userId === user.id) {
-    res.json(textById);
-    return;
+  if (textById.userId !== user.id) {
+    throw boom.forbidden('You do not have access to this text.');
   }
 
-  res.status(404).send();
+  res.json(textById);
 });
 
 router.get('/', async (_req, res): Promise<void> => {
   const { user } = res.locals;
   const isAdmin = await users.isAdmin(Number(user.id));
 
-  if (isAdmin) {
-    const allTexts: Array<Text> = await texts.getAll();
-    res.json(allTexts);
+  if (!isAdmin) {
+    throw boom.forbidden('Admin access required.');
   }
 
-  res.status(404).send();
+  const allTexts: Array<Text> = await texts.getAll();
+  res.json(allTexts);
 });
 
 router.post('/', async (req, res): Promise<void> => {
   const { user } = res.locals;
 
-  if (user.verified === true) {
-    const textData: Text = req.body;
-    textData.userId = user.id;
-
-    const text: Text = await texts.addNew(textData);
-    res.json(text);
+  if (!user.verified) {
+    throw boom.forbidden('You must verify your email before adding texts.');
   }
 
-  res.status(406).send();
+  const textData: Text = req.body;
+  textData.userId = user.id;
+
+  const text: Text = await texts.addNew(textData);
+  res.json(text);
 });
 
 router.put('/:id/progress', async (req, res): Promise<void> => {
@@ -65,8 +65,7 @@ router.put('/:id/progress', async (req, res): Promise<void> => {
   const text: Text = await texts.getById(id, Number(user.id));
 
   if (text.userId !== user.id) {
-    res.status(404).send();
-    return;
+    throw boom.forbidden('You do not have access to this text.');
   }
 
   const progress = await readingProgress.save(
@@ -83,12 +82,12 @@ router.put('/:id', async (req, res): Promise<void> => {
   const id: number = Number(req.params.id);
   const textData = req.body;
 
-  if (textData.userId === user.id) {
-    const updatedText: Text = await texts.update({ id, ...textData });
-    res.json(updatedText);
+  if (textData.userId !== user.id) {
+    throw boom.forbidden('You do not have access to this text.');
   }
 
-  res.status(406).send();
+  const updatedText: Text = await texts.update({ id, ...textData });
+  res.json(updatedText);
 });
 
 router.delete('/:id', async (req, res): Promise<void> => {
@@ -97,12 +96,12 @@ router.delete('/:id', async (req, res): Promise<void> => {
 
   const toBeDeleted: Text = await texts.getById(id, Number(user.id));
 
-  if (toBeDeleted.userId === user.id) {
-    await texts.remove(id);
-    res.status(204).send();
+  if (toBeDeleted.userId !== user.id) {
+    throw boom.forbidden('You do not have access to this text.');
   }
 
-  res.status(406).send();
+  await texts.remove(id);
+  res.status(204).send();
 });
 
 export default router;

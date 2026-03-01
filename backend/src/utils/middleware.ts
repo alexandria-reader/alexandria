@@ -1,7 +1,8 @@
 import boom from '@hapi/boom';
 import type { NextFunction, Request, Response } from 'express';
-import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import users from '../services/users';
+import env from '../lib/env';
 
 export const extractToken = function (
   req: Request,
@@ -30,17 +31,19 @@ export const getUserFromToken = async function (
 ) {
   if (!res.locals.token) throw boom.unauthorized('token missing or invalid');
 
-  const decodedToken = jwt.verify(
-    res.locals.token,
-    process.env.SECRET as Secret
-  );
-
-  if (isJWTPayload(decodedToken)) {
-    if (!decodedToken.id) throw boom.unauthorized('token invalid or missing');
-
-    const userById = await users.getById(decodedToken.id);
-    res.locals.user = userById;
+  let decodedToken: string | JwtPayload;
+  try {
+    decodedToken = jwt.verify(res.locals.token, env.SECRET);
+  } catch {
+    throw boom.unauthorized('token missing or invalid');
   }
+
+  if (!isJWTPayload(decodedToken) || !decodedToken.id) {
+    throw boom.unauthorized('token missing or invalid');
+  }
+
+  const userById = await users.getById(decodedToken.id);
+  res.locals.user = userById;
 
   next();
 };
