@@ -11,6 +11,7 @@ import languageRouter from './routes/languages';
 import webdictionariesRouter from './routes/webdictionaries';
 import urlExtranctionRouter from './routes/url';
 
+import dbQuery from './model/db-query';
 import { extractToken, getUserFromToken } from './utils/middleware';
 
 import { notFoundHandler, generalErrorHandler } from './utils/errorHandlers';
@@ -18,6 +19,15 @@ import { notFoundHandler, generalErrorHandler } from './utils/errorHandlers';
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.get('/health', async (_req, res) => {
+  try {
+    await dbQuery('SELECT 1');
+    res.json({ status: 'ok' });
+  } catch {
+    res.status(503).json({ status: 'unhealthy' });
+  }
+});
 
 app.use(extractToken);
 
