@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 
 import textsRouter from './routes/texts';
 import translationsRouter from './routes/translations';
@@ -17,6 +18,7 @@ import { extractToken, getUserFromToken } from './utils/middleware';
 import { notFoundHandler, generalErrorHandler } from './utils/errorHandlers';
 
 const app = express();
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
