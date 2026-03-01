@@ -87,6 +87,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
@@ -98,7 +105,7 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
 
       - name: Deploy via forced command
-        run: ssh -i ~/.ssh/deploy_key "$SERVER_USER@$SERVER_IP"
+        run: ssh -i ~/.ssh/deploy_key "$SERVER_USER@$TAILSCALE_IP"
         env:
           SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
+          TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}

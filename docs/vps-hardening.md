@@ -31,7 +31,7 @@ Do this first in the Hetzner console. This is the most important layer because *
 | TCP | 443 | Any | HTTPS |
 | UDP | 443 | Any | HTTP/3 QUIC |
 
-For the SSH rule, click the source field and enter your current public IP in CIDR notation (e.g. `203.0.113.42/32`). To find your IP: `curl -4 ifconfig.me`. If your ISP gives you a dynamic IP, you can use a wider range (e.g. `/24`) or update this rule when your IP changes.
+Port 22 is restricted to your IP(s). CI/CD deploys reach the server over Tailscale (private network), not the public internet — see [Tailscale for CI/CD](#tailscale-for-cicd) below. UFW also allows SSH on the `tailscale0` interface (`sudo ufw allow in on tailscale0 to any port 22`).
 
 For the HTTP/HTTPS/QUIC rules, leave source as `Any` (0.0.0.0/0 and ::/0).
 
@@ -154,26 +154,68 @@ passwd -l root
 
 > **Order matters:** Lock root only after you've verified SSH works for your admin user in a separate session. If SSH is misconfigured and root is locked, your only recovery path is the Hetzner VNC console.
 
-### CI/CD host key verification TODO
+### CI/CD host key verification ✅
 
-Without host key verification, a MITM attack could intercept deploy traffic. On the server, get the host key fingerprint:
+The VPS host key is stored as a GitHub Actions secret (`SSH_KNOWN_HOSTS`) and written to `~/.ssh/known_hosts` in the deploy workflow. The key was scanned from the VPS's Tailscale IP (not the public IP) since CI/CD connects over Tailscale.
 
+To re-scan if the host key changes (e.g. OS reinstall):
 ```bash
-ssh-keyscan -t ed25519 YOUR_SERVER_IP
+# On the VPS:
+ssh-keyscan -t ed25519 $(tailscale ip -4)
+# Set the output (replacing localhost with the Tailscale IP) as SSH_KNOWN_HOSTS in GitHub Actions secrets
 ```
 
-Store the output as a GitHub Actions secret (`SSH_KNOWN_HOSTS`). In your workflow, write it to `~/.ssh/known_hosts` before connecting:
+### Tailscale for CI/CD ✅
 
-```yaml
-- name: Set up SSH
-  run: |
-    mkdir -p ~/.ssh
-    echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-    echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-    chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+GitHub Actions runners connect to the VPS over Tailscale instead of the public internet. This keeps port 22 restricted to the admin's IP in the Hetzner Cloud Firewall — no public SSH exposure for CI/CD.
+
+```mermaid
+sequenceDiagram
+    participant GH as GitHub Actions
+    participant TS as Tailscale
+    participant VPS as Hetzner VPS
+
+    GH->>GH: Test → Build → Push image to ghcr.io
+    GH->>TS: Join tailnet as tag:ci (OAuth, ephemeral)
+    TS-->>GH: Assigned Tailscale IP
+    GH->>VPS: SSH to Tailscale IP (deploy key)
+    Note over VPS: ForceCommand triggers deploy.sh
+    VPS->>VPS: docker compose pull
+    VPS->>VPS: docker compose up -d --wait
+    VPS-->>GH: Exit code (0 = healthy, 1 = failed)
+    GH->>TS: Disconnect (ephemeral node removed)
 ```
 
-Use `StrictHostKeyChecking=yes` (the default) — never set it to `no`.
+**Setup:**
+1. Install Tailscale on the VPS: `curl -fsSL https://tailscale.com/install.sh | sh && sudo tailscale up`
+2. Join the `alexandria-reader` org tailnet
+3. Tag the VPS as `tag:server` in the Tailscale admin console
+4. Create an OAuth client (Settings → Trust credentials) with `Devices → Core → Write` scope and `tag:ci`
+5. UFW rule to allow SSH on the Tailscale interface: `sudo ufw allow in on tailscale0 to any port 22`
+
+**ACL policy** (Access controls → JSON editor):
+```json
+{
+  "tagOwners": {
+    "tag:ci": ["autogroup:admin"],
+    "tag:server": ["autogroup:admin"]
+  },
+  "acls": [
+    {"action": "accept", "src": ["autogroup:member"], "dst": ["*:*"]},
+    {"action": "accept", "src": ["tag:ci"], "dst": ["tag:server:22"]}
+  ]
+}
+```
+
+**GitHub Actions secrets:**
+| Secret | Value |
+|--------|-------|
+| `TS_OAUTH_CLIENT_ID` | Tailscale OAuth client ID |
+| `TS_OAUTH_SECRET` | Tailscale OAuth client secret |
+| `TAILSCALE_IP` | VPS Tailscale IP (`tailscale ip -4` on VPS) |
+| `DEPLOY_SSH_KEY` | Deploy key private key |
+| `SSH_KNOWN_HOSTS` | Host key at Tailscale IP |
+| `SERVER_USER` | `deploy` |
 
 ## 4. Install Docker ✅
 
