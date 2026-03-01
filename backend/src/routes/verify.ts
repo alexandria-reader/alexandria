@@ -1,7 +1,8 @@
 import boom from '@hapi/boom';
 import express from 'express';
+import { z } from 'zod';
 import users from '../services/users';
-import { getUserFromToken } from '../utils/middleware';
+import { getUserFromToken, validate } from '../utils/middleware';
 import { User } from '../types';
 import sendmail from '../utils/sendmail';
 
@@ -32,11 +33,20 @@ verifyRouter.get('/resend-email', getUserFromToken, async (_req, res) => {
   res.send('Sent email again.');
 });
 
-verifyRouter.get('/:code/:token', async (req, res) => {
-  const { code, token } = req.params;
-
-  await users.verify(code, token);
-  res.redirect('https://tryalexandria.com/verify');
+const verifyParams = z.object({
+  code: z.string().min(1),
+  token: z.string().min(1),
 });
+
+verifyRouter.get(
+  '/:code/:token',
+  validate({ params: verifyParams }),
+  async (_req, res) => {
+    const { params } = res.locals;
+
+    await users.verify(params.code, params.token);
+    res.redirect('https://tryalexandria.com/verify');
+  }
+);
 
 export default verifyRouter;

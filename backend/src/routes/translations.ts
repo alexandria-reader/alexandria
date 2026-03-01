@@ -1,51 +1,66 @@
 import express from 'express';
+import { z } from 'zod';
 import translations from '../services/translations';
-import { Translation } from '@alexandria/shared';
+import {
+  Translation,
+  AddTranslationRequestSchema,
+  UpdateTranslationRequestSchema,
+} from '@alexandria/shared';
+import { validate } from '../utils/middleware';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  const { user } = res.locals;
-  const { wordId, translation, targetLanguageId, context } = req.body;
+router.post(
+  '/',
+  validate({ body: AddTranslationRequestSchema }),
+  async (req, res) => {
+    const { user } = res.locals;
+    const { wordId, translation, targetLanguageId, context } = req.body;
 
-  const newTranslation: Translation = await translations.add(
-    Number(wordId),
-    translation,
-    targetLanguageId
-  );
-
-  if (newTranslation.id) {
-    await translations.addToUsersTranslations(
-      Number(user.id),
-      newTranslation.id,
-      context
+    const newTranslation: Translation = await translations.add(
+      wordId,
+      translation,
+      targetLanguageId
     );
+
+    if (newTranslation.id) {
+      await translations.addToUsersTranslations(
+        Number(user.id),
+        newTranslation.id,
+        context
+      );
+    }
+
+    res.send(newTranslation);
   }
+);
 
-  res.send(newTranslation);
-});
+const idParams = z.object({ id: z.coerce.number().int().positive() });
 
-router.put('/:id', async (req, res) => {
-  const { translation } = req.body;
-  const { id } = req.params;
-  const updatedTranslation: Translation = await translations.update(
-    Number(id),
-    translation
-  );
+router.put(
+  '/:id',
+  validate({ params: idParams, body: UpdateTranslationRequestSchema }),
+  async (req, res) => {
+    const { translation } = req.body;
+    const { params, user } = res.locals;
+    const updatedTranslation: Translation = await translations.update(
+      params.id,
+      translation
+    );
 
-  const { user } = res.locals;
-  const context: string = await translations.getUserTranslationContext(
-    Number(user.id),
-    Number(id)
-  );
+    const context: string = await translations.getUserTranslationContext(
+      Number(user.id),
+      params.id
+    );
 
-  res.json({ ...updatedTranslation, context });
-});
+    res.json({ ...updatedTranslation, context });
+  }
+);
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+router.delete('/:id', validate({ params: idParams }), async (_req, res) => {
+  const { params } = res.locals;
 
-  await translations.remove(Number(id));
+  await translations.remove(params.id);
   res.status(204).send();
 });
 
