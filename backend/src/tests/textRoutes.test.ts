@@ -34,7 +34,6 @@ describe('Testing adding texts', () => {
 
   test('A text is added successfully', async () => {
     const text = {
-      userId: 1,
       languageId: 'en',
       title: 'The Little Match Girl',
       body: 'It was so terribly cold.',
@@ -44,7 +43,7 @@ describe('Testing adding texts', () => {
       .post('/api/texts')
       .set('Authorization', `Bearer ${token}`)
       .send(text)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/);
 
     expect(response.text).toMatch(/The Little Match Girl/);
@@ -96,7 +95,6 @@ describe('Testing adding texts', () => {
 
   test('Texts can be updated', async () => {
     const text = {
-      userId: 1,
       languageId: 'en',
       title: 'The Little Match Boy',
       body: 'It was so terribly cold.',

@@ -11,14 +11,14 @@
     "start": "node build/server.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev src/server.ts",
     "staging": "cross-env NODE_ENV=staging ts-node-dev src/server.ts",
-    "test": "cross-env NODE_ENV=test DATABASE_URL=postgresql://user:password@localhost:5432/test jest --verbose --runInBand --collectCoverage",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand --collectCoverage",
     "test:unit": "jest --config jest.unit.config.js --verbose",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "prettier": "npx prettier --write .",
     "format": "npm run prettier && npm run lint:fix",
     "tsc": "tsc",
-    "start:test": "cross-env NODE_ENV=test DATABASE_URL=postgresql://user:password@localhost:5432/test node index.js"
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "lint-staged": {
     "src/**/*.{js,ts}": [
