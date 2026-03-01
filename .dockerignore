@@ -1,0 +1,16 @@
+.git/
+node_modules/
+frontend/
+coverage/
+.env*
+!.env.production.example
+.github/
+docs/
+.plans/
+.claude/
+.playwright-mcp/
+**/*.test.ts
+**/*.spec.ts
+backend/postgres.yaml
+backend/src/model/seed.sql
+backend/src/model/schema.sql
