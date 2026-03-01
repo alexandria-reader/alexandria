@@ -1,0 +1,3 @@
+api.tryalexandria.com {
+	reverse_proxy alexandria-backend:3000
+}
