@@ -24,11 +24,11 @@ Managed with [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 6. Run `npm run docker:start` to start the database
 7. Run `npm run dev` to start both backend and frontend
 
-The backend runs on `http://localhost:3001` and the frontend on `http://localhost:3000`.
+The backend runs on `http://localhost:3000` and the frontend on `http://localhost:5173`.
 
 # API Documentation
 
-Swagger UI is available at [http://localhost:3001/api/docs](http://localhost:3001/api/docs) when the backend is running. The raw OpenAPI spec is served at `/api/docs/openapi.json`.
+Swagger UI is available at [http://localhost:3000/api/docs](http://localhost:3000/api/docs) when the backend is running. The raw OpenAPI spec is served at `/api/docs/openapi.json`.
 
 # Testing
 
