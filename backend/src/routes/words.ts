@@ -1,61 +1,88 @@
 import express from 'express';
+import { z } from 'zod';
 import words from '../services/words';
-import { UserWord } from '@alexandria/shared';
+import {
+  UserWord,
+  UserWordSchema,
+  UpdateWordRequestSchema,
+} from '@alexandria/shared';
+import { validate } from '../utils/middleware';
 
 const router = express.Router();
 
+const textLanguageParams = z.object({
+  textId: z.coerce.number().int().positive(),
+  languageId: z.string().min(1),
+});
+
 router.get(
   '/text/:textId/language/:languageId',
-  async (req, res): Promise<void> => {
-    const { user } = res.locals;
-
-    const { textId, languageId } = req.params;
+  validate({ params: textLanguageParams }),
+  async (_req, res): Promise<void> => {
+    const { user, params } = res.locals;
 
     const userwordsInText: Array<UserWord> = await words.getUserwordsInText(
       Number(user.id),
-      Number(textId),
-      languageId,
+      params.textId,
+      params.languageId,
       true
     );
     res.json(userwordsInText);
   }
 );
 
-router.get('/language/:languageId', async (req, res): Promise<void> => {
-  const { user } = res.locals;
+const languageParams = z.object({ languageId: z.string().min(1) });
 
-  const { languageId } = req.params;
-  const userwordsInLanguage: Array<UserWord> =
-    await words.getUserwordsByLanguage(languageId, Number(user.id));
+router.get(
+  '/language/:languageId',
+  validate({ params: languageParams }),
+  async (_req, res): Promise<void> => {
+    const { user, params } = res.locals;
 
-  res.json(userwordsInLanguage);
-});
+    const userwordsInLanguage: Array<UserWord> =
+      await words.getUserwordsByLanguage(params.languageId, Number(user.id));
 
-router.post('/', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const userWordData: UserWord = req.body;
-
-  const newUserWord: UserWord = await words.addNewUserWord(user, userWordData);
-
-  res.status(201).json(newUserWord);
-});
-
-router.put('/:id', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const { id } = req.params;
-  const { status } = req.body;
-
-  if (status) {
-    const updatedStatus: string = await words.updateStatus(
-      Number(id),
-      Number(user.id),
-      status
-    );
-    res.send(updatedStatus);
-  } else {
-    await words.removeUserWord(Number(id), Number(user.id));
-    res.status(204).send();
+    res.json(userwordsInLanguage);
   }
-});
+);
+
+router.post(
+  '/',
+  validate({ body: UserWordSchema }),
+  async (req, res): Promise<void> => {
+    const { user } = res.locals;
+    const userWordData: UserWord = req.body;
+
+    const newUserWord: UserWord = await words.addNewUserWord(
+      user,
+      userWordData
+    );
+
+    res.status(201).json(newUserWord);
+  }
+);
+
+const wordIdParams = z.object({ id: z.coerce.number().int().positive() });
+
+router.put(
+  '/:id',
+  validate({ params: wordIdParams, body: UpdateWordRequestSchema }),
+  async (req, res): Promise<void> => {
+    const { user, params } = res.locals;
+    const { status } = req.body;
+
+    if (status) {
+      const updatedStatus: string = await words.updateStatus(
+        params.id,
+        Number(user.id),
+        status
+      );
+      res.send(updatedStatus);
+    } else {
+      await words.removeUserWord(params.id, Number(user.id));
+      res.status(204).send();
+    }
+  }
+);
 
 export default router;

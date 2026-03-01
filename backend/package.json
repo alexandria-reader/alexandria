@@ -38,19 +38,23 @@
   "homepage": "https://github.com/alexandria-reader/backend#readme",
   "dependencies": {
     "@alexandria/shared": "*",
+    "@asteasolutions/zod-to-openapi": "8.4.1",
     "@hapi/boom": "^10.0.0",
     "article-parser": "^7.2.4",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "helmet": "8.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.8.0",
     "pg-format": "^1.0.4",
     "resend": "^6.9.3",
+    "swagger-ui-express": "5.0.1",
     "tslib": "^2.4.0",
     "typescript": "^5.9.3",
-    "uuid": "^11.1.0"
+    "uuid": "11.1.0",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@swc/core": "^1.15.17",
@@ -63,6 +67,7 @@
     "@types/pg": "^8.6.5",
     "@types/pg-format": "^1.0.2",
     "@types/supertest": "^7.2.0",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/uuid": "^10.0.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.3",
@@ -72,7 +77,6 @@
     "lint-staged": "^16.3.0",
     "prettier": "^3.8.1",
     "supertest": "^7.2.2",
-    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript-eslint": "^8.56.1"

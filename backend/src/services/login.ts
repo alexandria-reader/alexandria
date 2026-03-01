@@ -5,6 +5,7 @@ import userData from '../data-access/users';
 import { LoggedInUser } from '@alexandria/shared';
 import { convertUserTypes, User, UserDB } from '../types';
 import users from './users';
+import env from '../lib/env';
 
 const verifyLoginDetails = async function (
   email: string,
@@ -38,11 +39,9 @@ const login = async function (
     id: verifiedUser.id,
   };
 
-  const token = jwt.sign(
-    userForToken,
-    String(process.env.SECRET),
-    { expiresIn: 60 * 60 * 24 * 7 } // token expires in one week
-  );
+  const token = jwt.sign(userForToken, env.SECRET, {
+    expiresIn: 60 * 60 * 24 * 7,
+  });
 
   const loggedInUser: LoggedInUser = { ...sanitizedUser, token };
 

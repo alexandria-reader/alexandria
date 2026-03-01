@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { Resend } from 'resend';
+import env from '../lib/env';
 
 let resend: Resend;
 function getResendClient() {
-  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  if (!resend) resend = new Resend(env.RESEND_API_KEY);
   return resend;
 }
 
@@ -12,10 +13,10 @@ const sendVerificationEmail = async function (
   email: string,
   name: string
 ): Promise<boolean> {
-  if (process.env.NODE_ENV === 'test') return false;
+  if (env.NODE_ENV === 'test') return false;
 
-  const token = jwt.sign(email, String(process.env.SECRET));
-  const verifyUrl = `${process.env.SERVER_URL}/verify/${code}/${token}`;
+  const token = jwt.sign(email, env.SECRET);
+  const verifyUrl = `${env.SERVER_URL}/verify/${code}/${token}`;
 
   try {
     const { error } = await getResendClient().emails.send({

@@ -62,7 +62,7 @@ describe('Testing adding users', () => {
     const response = await api
       .post('/api/users')
       .send(newUser)
-      .expect(406)
+      .expect(409)
       .expect('Content-Type', /application\/json/);
 
     expect(response.text).toContain('Email already in use');
@@ -93,7 +93,7 @@ describe('Testing adding users', () => {
       .put('/api/users/change-password')
       .set('Authorization', `Bearer ${token}`)
       .send(password)
-      .expect(406)
+      .expect(401)
       .expect('Content-Type', /application\/json/);
 
     expect(response.text).toContain('Incorrect password');

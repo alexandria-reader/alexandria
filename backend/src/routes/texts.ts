@@ -1,108 +1,144 @@
+import boom from '@hapi/boom';
 import express from 'express';
+import { z } from 'zod';
 import texts from '../services/texts';
 import readingProgress from '../services/reading-progress';
 import users from '../services/users';
-import { TextPagination, Text } from '@alexandria/shared';
+import {
+  TextPagination,
+  Text,
+  CreateTextRequestSchema,
+  UpdateTextRequestSchema,
+  SaveProgressRequestSchema,
+} from '@alexandria/shared';
+import { validate } from '../utils/middleware';
 
 const router: express.Router = express.Router();
 
-router.get('/language/:languageId/:page/', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const { languageId, page } = req.params;
-  const textPagination: TextPagination = await texts.getByUserAndLanguage(
-    Number(user.id),
-    languageId,
-    page
-  );
-  res.json(textPagination);
+const idParams = z.object({ id: z.coerce.number().int().positive() });
+const paginationParams = z.object({
+  languageId: z.string().min(1),
+  page: z.string().min(1),
 });
 
-router.get('/:id', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const { id } = req.params;
-
-  const textById: Text = await texts.getById(Number(id), Number(user.id));
-
-  if (textById.userId === user.id) {
-    res.json(textById);
-    return;
+router.get(
+  '/language/:languageId/:page/',
+  validate({ params: paginationParams }),
+  async (_req, res): Promise<void> => {
+    const { user, params } = res.locals;
+    const textPagination: TextPagination = await texts.getByUserAndLanguage(
+      Number(user.id),
+      params.languageId,
+      params.page
+    );
+    res.json(textPagination);
   }
+);
 
-  res.status(404).send();
-});
+router.get(
+  '/:id',
+  validate({ params: idParams }),
+  async (_req, res): Promise<void> => {
+    const { user, params } = res.locals;
+
+    const textById: Text = await texts.getById(params.id, Number(user.id));
+
+    if (textById.userId !== user.id) {
+      throw boom.forbidden('You do not have access to this text.');
+    }
+
+    res.json(textById);
+  }
+);
 
 router.get('/', async (_req, res): Promise<void> => {
   const { user } = res.locals;
   const isAdmin = await users.isAdmin(Number(user.id));
 
-  if (isAdmin) {
-    const allTexts: Array<Text> = await texts.getAll();
-    res.json(allTexts);
+  if (!isAdmin) {
+    throw boom.forbidden('Admin access required.');
   }
 
-  res.status(404).send();
+  const allTexts: Array<Text> = await texts.getAll();
+  res.json(allTexts);
 });
 
-router.post('/', async (req, res): Promise<void> => {
-  const { user } = res.locals;
+router.post(
+  '/',
+  validate({ body: CreateTextRequestSchema }),
+  async (req, res): Promise<void> => {
+    const { user } = res.locals;
 
-  if (user.verified === true) {
+    if (!user.verified) {
+      throw boom.forbidden('You must verify your email before adding texts.');
+    }
+
     const textData: Text = req.body;
     textData.userId = user.id;
 
     const text: Text = await texts.addNew(textData);
-    res.json(text);
+    res.status(201).json(text);
   }
+);
 
-  res.status(406).send();
-});
+router.put(
+  '/:id/progress',
+  validate({ params: idParams, body: SaveProgressRequestSchema }),
+  async (req, res): Promise<void> => {
+    const { user, params } = res.locals;
+    const { pageStartWordIndex } = req.body;
 
-router.put('/:id/progress', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const id: number = Number(req.params.id);
-  const { pageStartWordIndex } = req.body;
+    const text: Text = await texts.getById(params.id, Number(user.id));
 
-  const text: Text = await texts.getById(id, Number(user.id));
+    if (text.userId !== user.id) {
+      throw boom.forbidden('You do not have access to this text.');
+    }
 
-  if (text.userId !== user.id) {
-    res.status(404).send();
-    return;
+    const progress = await readingProgress.save(
+      Number(user.id),
+      params.id,
+      pageStartWordIndex
+    );
+    res.json(progress);
   }
+);
 
-  const progress = await readingProgress.save(
-    Number(user.id),
-    id,
-    pageStartWordIndex
-  );
-  res.json(progress);
-});
+router.put(
+  '/:id',
+  validate({ params: idParams, body: UpdateTextRequestSchema }),
+  async (req, res): Promise<void> => {
+    const { user, params } = res.locals;
 
-router.put('/:id', async (req, res): Promise<void> => {
-  const { user } = res.locals;
+    const existing: Text = await texts.getById(params.id, Number(user.id));
+    if (existing.userId !== user.id) {
+      throw boom.forbidden('You do not have access to this text.');
+    }
 
-  const id: number = Number(req.params.id);
-  const textData = req.body;
-
-  if (textData.userId === user.id) {
-    const updatedText: Text = await texts.update({ id, ...textData });
+    const updatedText: Text = await texts.update({
+      ...existing,
+      ...req.body,
+      id: params.id,
+      userId: user.id,
+    });
     res.json(updatedText);
   }
+);
 
-  res.status(406).send();
-});
+router.delete(
+  '/:id',
+  validate({ params: idParams }),
+  async (_req, res): Promise<void> => {
+    const { user, params } = res.locals;
 
-router.delete('/:id', async (req, res): Promise<void> => {
-  const { user } = res.locals;
-  const id: number = Number(req.params.id);
+    const toBeDeleted: Text = await texts.getById(params.id, Number(user.id));
 
-  const toBeDeleted: Text = await texts.getById(id, Number(user.id));
+    if (toBeDeleted.userId !== user.id) {
+      throw boom.forbidden('You do not have access to this text.');
+    }
 
-  if (toBeDeleted.userId === user.id) {
-    await texts.remove(id);
+    await texts.remove(params.id);
     res.status(204).send();
   }
-
-  res.status(406).send();
-});
+);
 
 export default router;

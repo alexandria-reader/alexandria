@@ -1,13 +1,18 @@
 import express from 'express';
 import login from '../services/login';
-import { LoggedInUser } from '@alexandria/shared';
+import { LoggedInUser, LoginRequestSchema } from '@alexandria/shared';
+import { validate } from '../utils/middleware';
 
 const loginRouter = express.Router();
 
-export default loginRouter.post('/', async (req, res) => {
-  const { email, password } = req.body;
+export default loginRouter.post(
+  '/',
+  validate({ body: LoginRequestSchema }),
+  async (req, res) => {
+    const { email, password } = req.body;
 
-  const loggedInUser: LoggedInUser = await login.login(email, password);
+    const loggedInUser: LoggedInUser = await login.login(email, password);
 
-  res.status(200).json(loggedInUser);
-});
+    res.status(200).json(loggedInUser);
+  }
+);

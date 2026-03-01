@@ -1,20 +1,36 @@
-import { ArticleData, extract } from 'article-parser';
+import boom from '@hapi/boom';
+import { extract } from 'article-parser';
 import express from 'express';
+import { ExtractUrlRequestSchema } from '@alexandria/shared';
+import { validate } from '../utils/middleware';
 
 const router: express.Router = express.Router();
 
-router.post('/', async (req, res) => {
-  const { url } = req.body;
-  const timer = setTimeout(() => res.status(204).send(), 2000);
+router.post(
+  '/',
+  validate({ body: ExtractUrlRequestSchema }),
+  async (req, res) => {
+    const { url } = req.body;
+    let responded = false;
 
-  try {
-    const article: ArticleData = await extract(url);
-    // TODO: investigate Trace: Error: Cannot set headers after they are sent to the client error
-    clearTimeout(timer);
-    res.json(article);
-  } catch (error) {
-    console.trace(error);
+    const timer = setTimeout(() => {
+      responded = true;
+      res.status(204).send();
+    }, 2000);
+
+    try {
+      const article = await extract(url);
+      clearTimeout(timer);
+      if (!responded) {
+        res.json(article);
+      }
+    } catch (_error) {
+      clearTimeout(timer);
+      if (!responded) {
+        throw boom.badRequest('Could not extract article from URL.');
+      }
+    }
   }
-});
+);
 
 export default router;

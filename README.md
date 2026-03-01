@@ -26,6 +26,10 @@ Managed with [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces).
 
 The backend runs on `http://localhost:3001` and the frontend on `http://localhost:3000`.
 
+# API Documentation
+
+Swagger UI is available at [http://localhost:3001/api/docs](http://localhost:3001/api/docs) when the backend is running. The raw OpenAPI spec is served at `/api/docs/openapi.json`.
+
 # Testing
 
 Run `npm test` from the root to run backend tests. This requires a running Postgres instance — use `npm run pgtest` to spin up a Docker container, run tests, and tear it down automatically.

@@ -58,6 +58,7 @@ describe('Testing adding a word', () => {
     const word = {
       languageId: 'en',
       word: 'hellotest',
+      translations: [],
     };
 
     await api
