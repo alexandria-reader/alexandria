@@ -20,7 +20,7 @@ const sendVerificationEmail = async function (
 
   try {
     const { error } = await getResendClient().emails.send({
-      from: 'Alexandria <noreply@tryalexandria.com>',
+      from: 'Alexandria <noreply@signup.tryalexandria.com>',
       to: email,
       subject: 'Verify your email address for Alexandria',
       text: `Text version of the link: ${verifyUrl}`,
