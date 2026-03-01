@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 
 import textsRouter from './routes/texts';
 import translationsRouter from './routes/translations';
@@ -16,6 +17,7 @@ import dbQuery from './model/db-query';
 import { extractToken, getUserFromToken } from './utils/middleware';
 
 import { notFoundHandler, generalErrorHandler } from './utils/errorHandlers';
+import { generateOpenAPIDocument } from './openapi/generator';
 
 const app = express();
 app.use(helmet());
@@ -30,6 +32,20 @@ app.get('/health', async (_req, res) => {
     res.status(503).json({ status: 'unhealthy' });
   }
 });
+
+const openApiDocument = generateOpenAPIDocument();
+app.get('/api/docs/openapi.json', (_req, res) => {
+  res.json(openApiDocument);
+});
+app.use(
+  '/api/docs',
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  }),
+  swaggerUi.serve,
+  swaggerUi.setup(openApiDocument)
+);
 
 app.use(extractToken);
 
