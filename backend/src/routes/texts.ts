@@ -80,13 +80,17 @@ router.put('/:id', async (req, res): Promise<void> => {
   const { user } = res.locals;
 
   const id: number = Number(req.params.id);
-  const textData = req.body;
-
-  if (textData.userId !== user.id) {
+  const existing: Text = await texts.getById(id, Number(user.id));
+  if (existing.userId !== user.id) {
     throw boom.forbidden('You do not have access to this text.');
   }
 
-  const updatedText: Text = await texts.update({ id, ...textData });
+  const updatedText: Text = await texts.update({
+    ...existing,
+    ...req.body,
+    id,
+    userId: user.id,
+  });
   res.json(updatedText);
 });
 

@@ -1,8 +1,48 @@
 import boom from '@hapi/boom';
 import type { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { z } from 'zod';
 import users from '../services/users';
 import env from '../lib/env';
+
+type ValidationSchemas = {
+  body?: z.ZodType;
+  params?: z.ZodType;
+  query?: z.ZodType;
+};
+
+export function validate(schemas: ValidationSchemas) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (schemas.params) {
+      const result = schemas.params.safeParse(req.params);
+      if (!result.success) {
+        throw boom.badRequest(
+          result.error.issues.map((i) => i.message).join('; ')
+        );
+      }
+      res.locals.params = result.data;
+    }
+    if (schemas.body) {
+      const result = schemas.body.safeParse(req.body);
+      if (!result.success) {
+        throw boom.badRequest(
+          result.error.issues.map((i) => i.message).join('; ')
+        );
+      }
+      req.body = result.data;
+    }
+    if (schemas.query) {
+      const result = schemas.query.safeParse(req.query);
+      if (!result.success) {
+        throw boom.badRequest(
+          result.error.issues.map((i) => i.message).join('; ')
+        );
+      }
+      res.locals.query = result.data;
+    }
+    next();
+  };
+}
 
 export const extractToken = function (
   req: Request,
