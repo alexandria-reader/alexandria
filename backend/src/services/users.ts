@@ -74,7 +74,7 @@ const addNew = async function (
   const emailExists = await userData.getByEmail(email);
   if ((emailExists.rowCount ?? 0) > 0)
     throw boom.conflict('Email already in use.');
-  const saltRounds = 10;
+  const saltRounds = 12;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const verificationCode = uuidv4();
   const result = await userData.addNew(
@@ -132,7 +132,7 @@ const updatePassword = async function (
     throw boom.unauthorized('Incorrect password.');
   }
 
-  const saltRounds = 10;
+  const saltRounds = 12;
   const passwordHash = await bcrypt.hash(newPassword, saltRounds);
   const result = await userData.updatePassword(userId, passwordHash);
 
