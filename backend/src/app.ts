@@ -18,10 +18,11 @@ import { extractToken, getUserFromToken } from './utils/middleware';
 
 import { notFoundHandler, generalErrorHandler } from './utils/errorHandlers';
 import { generateOpenAPIDocument } from './openapi/generator';
+import env from './lib/env';
 
 const app = express();
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: env.CORS_ORIGIN }));
 app.use(express.json());
 
 app.get('/health', async (_req, res) => {

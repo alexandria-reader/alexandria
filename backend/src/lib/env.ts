@@ -18,6 +18,7 @@ const envSchema = z
       .enum(['true', 'false'])
       .default('false')
       .transform((v) => v === 'true'),
+    CORS_ORIGIN: z.string().default('*'),
     DEBUG: z.string().optional(),
   })
   .superRefine((val, ctx) => {
