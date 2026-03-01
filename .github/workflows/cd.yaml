@@ -104,8 +104,23 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
 
+      - name: Wait for Tailscale connectivity
+        run: |
+          for i in $(seq 1 30); do
+            if tailscale ping --timeout=2s "$TAILSCALE_IP" 2>/dev/null; then
+              echo "Tailscale connection established"
+              exit 0
+            fi
+            echo "Attempt $i: waiting for Tailscale route..."
+            sleep 2
+          done
+          echo "Failed to establish Tailscale connection"
+          exit 1
+        env:
+          TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
+
       - name: Deploy via forced command
-        run: ssh -i ~/.ssh/deploy_key "$SERVER_USER@$TAILSCALE_IP"
+        run: ssh -o ConnectTimeout=30 -i ~/.ssh/deploy_key "$SERVER_USER@$TAILSCALE_IP"
         env:
           SERVER_USER: ${{ secrets.SERVER_USER }}
           TAILSCALE_IP: ${{ secrets.TAILSCALE_IP }}
