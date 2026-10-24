@@ -7,7 +7,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: node:22-bookworm
+    container: node:26-bookworm
 
     services:
       postgres:

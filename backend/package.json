@@ -4,7 +4,7 @@
   "description": "Learn languages by reading.",
   "main": "build/server.js",
   "engines": {
-    "node": ">=20"
+    "node": ">=26"
   },
   "scripts": {
     "build": "tsc",
